@@ -1,34 +1,6 @@
-import { AuthenticationError, UserInputError } from "apollo-server-express";
-import {
-  extendType,
-  idArg,
-  inputObjectType,
-  list,
-  nonNull,
-  objectType,
-  stringArg,
-} from "nexus";
+import { extendType, idArg, nonNull, objectType, stringArg } from "nexus";
 import { isAuth } from "./auth/isAuth";
-
-export const WorkoutSchemaExercise = objectType({
-  name: "WorkoutSchemaExercise",
-  definition(t) {
-    t.nonNull.string("name");
-    t.int("reps");
-    t.float("weight");
-    t.int("duration");
-  },
-});
-
-export const WorkoutSchemaExerciseInput = inputObjectType({
-  name: "WorkoutSchemaExerciseInput",
-  definition(t) {
-    t.nonNull.string("name");
-    t.int("reps");
-    t.float("weight");
-    t.int("duration");
-  },
-});
+import { isAuthWorkoutSchema } from "./auth/isAuthWorkoutSchema";
 
 export const WorkoutSchema = objectType({
   name: "WorkoutSchema",
@@ -89,6 +61,25 @@ export const WorkoutSchemaQuery = extendType({
         return workoutSchemas;
       },
     });
+    t.nonNull.field("workoutSchemaById", {
+      type: "WorkoutSchema",
+      authorize: isAuthWorkoutSchema,
+      args: {
+        workoutSchemaId: nonNull(idArg()),
+      },
+      async resolve(_root, args, ctx) {
+        const workoutSchema = await ctx.db.workoutSchema.findUnique({
+          where: {
+            id: args.workoutSchemaId,
+          },
+          include: {
+            user: true,
+          },
+        });
+
+        return workoutSchema!;
+      },
+    });
   },
 });
 
@@ -110,51 +101,6 @@ export const WorkoutSchemaMutation = extendType({
         });
 
         return workoutSchema;
-      },
-    });
-
-    t.nonNull.field("updateWorkoutSchemaExercises", {
-      type: "WorkoutSchema",
-      authorize: isAuth,
-      args: {
-        id: nonNull(idArg()),
-        exercises: nonNull(list(nonNull("WorkoutSchemaExerciseInput"))),
-      },
-      async resolve(_root, { id, exercises }, ctx) {
-        const workoutSchema = await ctx.db.workoutSchema.findUnique({
-          where: {
-            id,
-          },
-        });
-
-        if (!workoutSchema) {
-          throw new UserInputError("WorkoutSchema not found");
-        }
-
-        if (workoutSchema.userId !== ctx.req.session.userId) {
-          throw new AuthenticationError(
-            "You are not authorized to delete this WorkoutSchema"
-          );
-        }
-
-        const workoutSchemaUpdated = await ctx.db.workoutSchema.update({
-          where: {
-            id,
-          },
-          data: {
-            exercises: {
-              deleteMany: {},
-              createMany: {
-                data: exercises.map((exercise, index) => ({
-                  ...exercise,
-                  order: index,
-                })),
-              },
-            },
-          },
-        });
-
-        return workoutSchemaUpdated;
       },
     });
 

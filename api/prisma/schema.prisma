@@ -39,6 +39,9 @@ model WorkoutRecord {
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
+  workoutSchemaId String
+  workoutSchema   WorkoutSchema @relation(fields: [workoutSchemaId], references: [id])
 }
 
 model WorkoutRecordExercise {
@@ -47,9 +50,9 @@ model WorkoutRecordExercise {
   updatedAt DateTime @updatedAt
 
   name     String
-  reps     Int?
-  weight   Int?
-  duration Int?
+  duration Int
+  reps     Int
+  weight   Int
 
   workoutRecordId String
   workoutRecord   WorkoutRecord @relation(fields: [workoutRecordId], references: [id])
@@ -68,6 +71,8 @@ model WorkoutSchema {
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
+  workoutRecords WorkoutRecord[]
 }
 
 model WorkoutSchemaExercise {

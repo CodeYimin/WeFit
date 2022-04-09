@@ -9,18 +9,24 @@ type FieldError {
 
 type Mutation {
   acceptFriendRequest(fromId: ID!): User!
+  addWorkoutSchemaExercise(name: String!, workoutSchemaId: ID!): WorkoutSchemaExercise!
+  createWorkoutRecord(exercises: [WorkoutRecordExerciseInput!]!, name: String!, workoutSchemaId: ID!): WorkoutRecord!
   createWorkoutSchema(name: String!): WorkoutSchema!
   deleteWorkoutSchema(id: String!): Boolean!
+  deleteWorkoutSchemaExercise(exerciseId: ID!): WorkoutSchemaExercise!
   login(password: String!, username: String!): UserAndErrorResponse!
   logout: Boolean!
   register(password: String!, username: String!): UserAndErrorResponse!
+  removeFriend(id: ID!): User!
   sendFriendRequest(username: String!): User!
-  updateWorkoutSchemaExercises(exercises: [WorkoutSchemaExerciseInput!]!, id: ID!): WorkoutSchema!
+  updateWorkoutSchemaExercise(data: WorkoutSchemaExerciseInput!, exerciseId: ID!): WorkoutSchemaExercise!
 }
 
 type Query {
   me: User!
   userById(id: ID!): User
+  workoutRecords: [WorkoutRecord!]!
+  workoutSchemaById(workoutSchemaId: ID!): WorkoutSchema!
   workoutSchemas: [WorkoutSchema!]!
 }
 
@@ -37,6 +43,27 @@ type UserAndErrorResponse {
   user: User
 }
 
+type WorkoutRecord {
+  exercises: [WorkoutRecordExercise!]!
+  id: ID!
+  user: User!
+}
+
+type WorkoutRecordExercise {
+  duration: Int!
+  id: ID!
+  name: String!
+  reps: Int!
+  weight: Float!
+}
+
+input WorkoutRecordExerciseInput {
+  duration: Int!
+  name: String!
+  reps: Int!
+  weight: Float!
+}
+
 type WorkoutSchema {
   exercises: [WorkoutSchemaExercise!]!
   id: ID!
@@ -46,6 +73,7 @@ type WorkoutSchema {
 
 type WorkoutSchemaExercise {
   duration: Int
+  id: ID!
   name: String!
   reps: Int
   weight: Float
@@ -53,7 +81,7 @@ type WorkoutSchemaExercise {
 
 input WorkoutSchemaExerciseInput {
   duration: Int
-  name: String!
+  name: String
   reps: Int
   weight: Float
 }

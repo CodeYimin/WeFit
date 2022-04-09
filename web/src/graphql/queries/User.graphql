@@ -10,3 +10,22 @@ query Me {
     username
   }
 }
+
+query GetFriendRequests {
+  me {
+    incomingFriendRequests {
+      id
+      username
+    }
+
+    outgoingFriendRequests {
+      id
+      username
+    }
+
+    friends {
+      id
+      username
+    }
+  }
+}

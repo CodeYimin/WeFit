@@ -222,16 +222,25 @@ export const PostMutation = extendType({
       async resolve(_root, { username }, ctx) {
         const toUser = await ctx.db.user.findFirst({
           where: { username },
+          include: {
+            friends: true,
+          },
         });
 
-        if (toUser?.id === ctx.req.session.userId) {
+        if (!toUser) {
+          throw new UserInputError("User not found");
+        }
+
+        if (toUser.id === ctx.req.session.userId) {
           throw new UserInputError(
             "You can't send friend requests to yourself"
           );
         }
 
-        if (!toUser) {
-          throw new UserInputError("User not found");
+        if (
+          toUser.friends.some((friend) => friend.id === ctx.req.session.userId)
+        ) {
+          throw new UserInputError("You are already friends with this user");
         }
 
         const updatedToUser = await ctx.db.user.update({
@@ -277,10 +286,50 @@ export const PostMutation = extendType({
                 id: ctx.req.session.userId,
               },
             },
+            friendsRelation: {
+              connect: {
+                id: ctx.req.session.userId,
+              },
+            },
           },
         });
 
         return updatedFromUser;
+      },
+    });
+
+    t.nonNull.field("removeFriend", {
+      type: "User",
+      authorize: isAuth,
+      args: {
+        id: nonNull(idArg()),
+      },
+      async resolve(_root, { id }, ctx) {
+        const user = await ctx.db.user.findUnique({
+          where: { id },
+        });
+
+        if (!user) {
+          throw new UserInputError("User not found");
+        }
+
+        const updatedUser = await ctx.db.user.update({
+          where: { id },
+          data: {
+            friends: {
+              disconnect: {
+                id: ctx.req.session.userId,
+              },
+            },
+            friendsRelation: {
+              disconnect: {
+                id: ctx.req.session.userId,
+              },
+            },
+          },
+        });
+
+        return updatedUser;
       },
     });
   },

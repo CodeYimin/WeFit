@@ -1,0 +1,20 @@
+mutation AddWorkoutSchemaExercise($workoutSchemaId: ID!, $name: String!) {
+  addWorkoutSchemaExercise(workoutSchemaId: $workoutSchemaId, name: $name) {
+    id
+  }
+}
+
+mutation UpdateWorkoutSchemaExercise(
+  $exerciseId: ID!
+  $data: WorkoutSchemaExerciseInput!
+) {
+  updateWorkoutSchemaExercise(exerciseId: $exerciseId, data: $data) {
+    id
+  }
+}
+
+mutation DeleteWorkoutSchemaExercise($exerciseId: ID!) {
+  deleteWorkoutSchemaExercise(exerciseId: $exerciseId) {
+    id
+  }
+}

@@ -1,0 +1,13 @@
+mutation CreateWorkoutRecord(
+  $workoutSchemaId: ID!
+  $name: String!
+  $exercises: [WorkoutRecordExerciseInput!]!
+) {
+  createWorkoutRecord(
+    workoutSchemaId: $workoutSchemaId
+    name: $name
+    exercises: $exercises
+  ) {
+    id
+  }
+}

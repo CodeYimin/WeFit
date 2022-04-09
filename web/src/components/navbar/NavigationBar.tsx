@@ -1,6 +1,5 @@
 import { useDisclosure } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import FriendSidebar from "./FriendSidebar";
@@ -20,7 +19,6 @@ const BarTitle = styled.button`
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
-  border-color: black;
 `;
 
 const BarButtons = styled.div`
@@ -39,9 +37,8 @@ const BarButton = styled.button`
 
 interface NavigationBarProps {}
 
-function NavigationBar({}: NavigationBarProps): ReactElement {
+function NavigationBar() {
   const navigate = useNavigate();
-
   const {
     isOpen: friendsOpen,
     onOpen: onFriendsOpen,
@@ -71,15 +68,15 @@ function NavigationBar({}: NavigationBarProps): ReactElement {
     <>
       <FriendSidebar isOpen={friendsOpen} onClose={onFriendsClose} />
       <Bar>
-        <BarTitle>WeFit</BarTitle>
+        <BarTitle onClick={() => navigate("/")}>WeFit</BarTitle>
         <BarButtons>
-          <BarButton>Workout</BarButton>
+          <BarButton onClick={() => navigate("/workouts")}>Workouts</BarButton>
           <BarButton
             onClick={() => {
               onFriendsOpen();
             }}
           >
-            Friend
+            Friends
           </BarButton>
           <BarButton
             onClick={async () => {

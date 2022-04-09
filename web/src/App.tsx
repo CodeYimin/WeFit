@@ -6,6 +6,7 @@ import NavigationBar from "./components/navbar/NavigationBar";
 import FeedPage from "./pages/feed/FeedPage";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import Workout from "./pages/workout/Workout";
 import Workouts from "./pages/workouts/Workouts";
 
 const apolloClient = new ApolloClient({
@@ -19,12 +20,44 @@ export default function App(): ReactElement {
     <ApolloProvider client={apolloClient}>
       <ChakraProvider theme={theme}>
         <BrowserRouter>
-          <NavigationBar />
           <Routes>
-            <Route path="/" element={<FeedPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/workout" element={<Workouts />} />
+            <Route
+              path="/"
+              element={
+                <>
+                  <NavigationBar />
+                  <FeedPage />
+                </>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <>
+                  <NavigationBar />
+                  <Register />
+                </>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <>
+                  <NavigationBar />
+                  <Login />
+                </>
+              }
+            />
+            <Route
+              path="/workouts"
+              element={
+                <>
+                  <NavigationBar />
+                  <Workouts />
+                </>
+              }
+            />
+            <Route path="/workout" element={<Workout />} />
           </Routes>
         </BrowserRouter>
       </ChakraProvider>

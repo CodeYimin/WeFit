@@ -3,6 +3,27 @@ query WorkoutSchemas {
     id
     name
     exercises {
+      id
+      name
+      reps
+      weight
+      duration
+    }
+  }
+}
+
+mutation CreateWorkoutSchema($name: String!) {
+  createWorkoutSchema(name: $name) {
+    id
+  }
+}
+
+query WorkoutSchemaById($workoutSchemaId: ID!) {
+  workoutSchemaById(workoutSchemaId: $workoutSchemaId) {
+    id
+    name
+    exercises {
+      id
       name
       reps
       weight

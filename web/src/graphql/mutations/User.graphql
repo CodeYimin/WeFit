@@ -25,3 +25,21 @@ mutation LoginUser($username: String!, $password: String!) {
 mutation Logout {
   logout
 }
+
+mutation SendFriendRequest($username: String!) {
+  sendFriendRequest(username: $username) {
+    id
+  }
+}
+
+mutation AcceptFriendRequest($id: ID!) {
+  acceptFriendRequest(fromId: $id) {
+    id
+  }
+}
+
+mutation RemoveFriend($id: ID!) {
+  removeFriend(id: $id) {
+    id
+  }
+}

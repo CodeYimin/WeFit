@@ -8,7 +8,6 @@ const FeedColumn = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin: 2rem;
   width: 100%;
   gap: 1rem;
 `;
