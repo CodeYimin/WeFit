@@ -10,6 +10,7 @@ type FieldError {
 type Mutation {
   acceptFriendRequest(fromId: ID!): User!
   addWorkoutSchemaExercise(name: String!, workoutSchemaId: ID!): WorkoutSchemaExercise!
+  cancelFriendRequest(toId: ID!): User!
   createWorkoutRecord(exercises: [WorkoutRecordExerciseInput!]!, name: String!, workoutSchemaId: ID!): WorkoutRecord!
   createWorkoutSchema(name: String!): WorkoutSchema!
   deleteWorkoutSchema(id: ID!): Boolean!
@@ -18,6 +19,7 @@ type Mutation {
   login(password: String!, username: String!): UserAndErrorResponse!
   logout: Boolean!
   register(password: String!, username: String!): UserAndErrorResponse!
+  rejectFriendRequest(fromId: ID!): User!
   removeFriend(id: ID!): User!
   sendFriendRequest(username: String!): User!
   unlikeWorkoutRecord(id: ID!): WorkoutRecord!

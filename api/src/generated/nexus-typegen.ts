@@ -98,6 +98,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     acceptFriendRequest: NexusGenRootTypes['User']; // User!
     addWorkoutSchemaExercise: NexusGenRootTypes['WorkoutSchemaExercise']; // WorkoutSchemaExercise!
+    cancelFriendRequest: NexusGenRootTypes['User']; // User!
     createWorkoutRecord: NexusGenRootTypes['WorkoutRecord']; // WorkoutRecord!
     createWorkoutSchema: NexusGenRootTypes['WorkoutSchema']; // WorkoutSchema!
     deleteWorkoutSchema: boolean; // Boolean!
@@ -106,6 +107,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['UserAndErrorResponse']; // UserAndErrorResponse!
     logout: boolean; // Boolean!
     register: NexusGenRootTypes['UserAndErrorResponse']; // UserAndErrorResponse!
+    rejectFriendRequest: NexusGenRootTypes['User']; // User!
     removeFriend: NexusGenRootTypes['User']; // User!
     sendFriendRequest: NexusGenRootTypes['User']; // User!
     unlikeWorkoutRecord: NexusGenRootTypes['WorkoutRecord']; // WorkoutRecord!
@@ -171,6 +173,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     acceptFriendRequest: 'User'
     addWorkoutSchemaExercise: 'WorkoutSchemaExercise'
+    cancelFriendRequest: 'User'
     createWorkoutRecord: 'WorkoutRecord'
     createWorkoutSchema: 'WorkoutSchema'
     deleteWorkoutSchema: 'Boolean'
@@ -179,6 +182,7 @@ export interface NexusGenFieldTypeNames {
     login: 'UserAndErrorResponse'
     logout: 'Boolean'
     register: 'UserAndErrorResponse'
+    rejectFriendRequest: 'User'
     removeFriend: 'User'
     sendFriendRequest: 'User'
     unlikeWorkoutRecord: 'WorkoutRecord'
@@ -245,6 +249,9 @@ export interface NexusGenArgTypes {
       name: string; // String!
       workoutSchemaId: string; // ID!
     }
+    cancelFriendRequest: { // args
+      toId: string; // ID!
+    }
     createWorkoutRecord: { // args
       exercises: NexusGenInputs['WorkoutRecordExerciseInput'][]; // [WorkoutRecordExerciseInput!]!
       name: string; // String!
@@ -269,6 +276,9 @@ export interface NexusGenArgTypes {
     register: { // args
       password: string; // String!
       username: string; // String!
+    }
+    rejectFriendRequest: { // args
+      fromId: string; // ID!
     }
     removeFriend: { // args
       id: string; // ID!

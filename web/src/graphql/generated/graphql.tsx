@@ -25,6 +25,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   acceptFriendRequest: User;
   addWorkoutSchemaExercise: WorkoutSchemaExercise;
+  cancelFriendRequest: User;
   createWorkoutRecord: WorkoutRecord;
   createWorkoutSchema: WorkoutSchema;
   deleteWorkoutSchema: Scalars['Boolean'];
@@ -33,6 +34,7 @@ export type Mutation = {
   login: UserAndErrorResponse;
   logout: Scalars['Boolean'];
   register: UserAndErrorResponse;
+  rejectFriendRequest: User;
   removeFriend: User;
   sendFriendRequest: User;
   unlikeWorkoutRecord: WorkoutRecord;
@@ -49,6 +51,11 @@ export type MutationAcceptFriendRequestArgs = {
 export type MutationAddWorkoutSchemaExerciseArgs = {
   name: Scalars['String'];
   workoutSchemaId: Scalars['ID'];
+};
+
+
+export type MutationCancelFriendRequestArgs = {
+  toId: Scalars['ID'];
 };
 
 
@@ -88,6 +95,11 @@ export type MutationLoginArgs = {
 export type MutationRegisterArgs = {
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+
+export type MutationRejectFriendRequestArgs = {
+  fromId: Scalars['ID'];
 };
 
 
@@ -244,6 +256,20 @@ export type AcceptFriendRequestMutationVariables = Exact<{
 
 export type AcceptFriendRequestMutation = { __typename?: 'Mutation', acceptFriendRequest: { __typename?: 'User', id: string } };
 
+export type RejectFriendRequestMutationVariables = Exact<{
+  fromId: Scalars['ID'];
+}>;
+
+
+export type RejectFriendRequestMutation = { __typename?: 'Mutation', rejectFriendRequest: { __typename?: 'User', id: string } };
+
+export type CancelFriendRequestMutationVariables = Exact<{
+  toId: Scalars['ID'];
+}>;
+
+
+export type CancelFriendRequestMutation = { __typename?: 'Mutation', cancelFriendRequest: { __typename?: 'User', id: string } };
+
 export type RemoveFriendMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -284,7 +310,7 @@ export type UserByIdQueryVariables = Exact<{
 }>;
 
 
-export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string, username: string, workoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }> } | null };
+export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string, username: string, workoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }>, friends: Array<{ __typename?: 'User', id: string }>, outgoingFriendRequests: Array<{ __typename?: 'User', id: string }>, incomingFriendRequests: Array<{ __typename?: 'User', id: string }> } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -530,6 +556,72 @@ export function useAcceptFriendRequestMutation(baseOptions?: Apollo.MutationHook
 export type AcceptFriendRequestMutationHookResult = ReturnType<typeof useAcceptFriendRequestMutation>;
 export type AcceptFriendRequestMutationResult = Apollo.MutationResult<AcceptFriendRequestMutation>;
 export type AcceptFriendRequestMutationOptions = Apollo.BaseMutationOptions<AcceptFriendRequestMutation, AcceptFriendRequestMutationVariables>;
+export const RejectFriendRequestDocument = gql`
+    mutation RejectFriendRequest($fromId: ID!) {
+  rejectFriendRequest(fromId: $fromId) {
+    id
+  }
+}
+    `;
+export type RejectFriendRequestMutationFn = Apollo.MutationFunction<RejectFriendRequestMutation, RejectFriendRequestMutationVariables>;
+
+/**
+ * __useRejectFriendRequestMutation__
+ *
+ * To run a mutation, you first call `useRejectFriendRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectFriendRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rejectFriendRequestMutation, { data, loading, error }] = useRejectFriendRequestMutation({
+ *   variables: {
+ *      fromId: // value for 'fromId'
+ *   },
+ * });
+ */
+export function useRejectFriendRequestMutation(baseOptions?: Apollo.MutationHookOptions<RejectFriendRequestMutation, RejectFriendRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RejectFriendRequestMutation, RejectFriendRequestMutationVariables>(RejectFriendRequestDocument, options);
+      }
+export type RejectFriendRequestMutationHookResult = ReturnType<typeof useRejectFriendRequestMutation>;
+export type RejectFriendRequestMutationResult = Apollo.MutationResult<RejectFriendRequestMutation>;
+export type RejectFriendRequestMutationOptions = Apollo.BaseMutationOptions<RejectFriendRequestMutation, RejectFriendRequestMutationVariables>;
+export const CancelFriendRequestDocument = gql`
+    mutation CancelFriendRequest($toId: ID!) {
+  cancelFriendRequest(toId: $toId) {
+    id
+  }
+}
+    `;
+export type CancelFriendRequestMutationFn = Apollo.MutationFunction<CancelFriendRequestMutation, CancelFriendRequestMutationVariables>;
+
+/**
+ * __useCancelFriendRequestMutation__
+ *
+ * To run a mutation, you first call `useCancelFriendRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelFriendRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelFriendRequestMutation, { data, loading, error }] = useCancelFriendRequestMutation({
+ *   variables: {
+ *      toId: // value for 'toId'
+ *   },
+ * });
+ */
+export function useCancelFriendRequestMutation(baseOptions?: Apollo.MutationHookOptions<CancelFriendRequestMutation, CancelFriendRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelFriendRequestMutation, CancelFriendRequestMutationVariables>(CancelFriendRequestDocument, options);
+      }
+export type CancelFriendRequestMutationHookResult = ReturnType<typeof useCancelFriendRequestMutation>;
+export type CancelFriendRequestMutationResult = Apollo.MutationResult<CancelFriendRequestMutation>;
+export type CancelFriendRequestMutationOptions = Apollo.BaseMutationOptions<CancelFriendRequestMutation, CancelFriendRequestMutationVariables>;
 export const RemoveFriendDocument = gql`
     mutation RemoveFriend($id: ID!) {
   removeFriend(id: $id) {
@@ -743,6 +835,15 @@ export const UserByIdDocument = gql`
         id
         username
       }
+    }
+    friends {
+      id
+    }
+    outgoingFriendRequests {
+      id
+    }
+    incomingFriendRequests {
+      id
     }
   }
 }

@@ -66,6 +66,7 @@ function WorkoutRecord({
           <Flex w="full" justifyContent="space-between" alignItems="center">
             <Text
               fontWeight="800"
+              fontSize="2xl"
               _hover={{ cursor: "pointer" }}
               onClick={() => {
                 navigate(`/profile/${user.id}`);
@@ -98,7 +99,7 @@ function WorkoutRecord({
           </Flex>
           <Flex w="full" justifyContent="space-between">
             <HStack>
-              <Text fontWeight="500">Completed a workout: </Text>
+              <Text fontWeight="600">Completed a workout: </Text>
               <Text>{name}</Text>
             </HStack>
             <Text>{timeFromNow(new Date(createdAt))} ago</Text>

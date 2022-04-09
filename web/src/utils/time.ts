@@ -3,9 +3,9 @@ export function secondsToTime(seconds: number): string {
   const minutes = Math.floor((seconds - hours * 3600) / 60);
   const secondsLeft = Math.round(seconds - hours * 3600 - minutes * 60);
 
-  return `${hours ? hours + ":" : ""}${
+  return `${hours ? hours + "h:" : ""}${
     minutes
-      ? `${minutes < 10 && hours > 0 ? `0${minutes}` : minutes}` + ":"
+      ? `${minutes < 10 && hours > 0 ? `0${minutes}` : minutes}` + "m:"
       : ""
   }${secondsLeft < 10 && minutes > 0 ? `0${secondsLeft}` : secondsLeft}`;
 }

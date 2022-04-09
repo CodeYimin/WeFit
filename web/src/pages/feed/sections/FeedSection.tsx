@@ -31,7 +31,7 @@ interface FeedSectionProps {
 function FeedSection({ workouts }: FeedSectionProps): ReactElement {
   return (
     <div>
-      <VStack spacing="2rem">
+      <VStack spacing="5rem">
         {!workouts.length && <Center>There are no workouts posted</Center>}
         {workouts.map((record) => (
           <WorkoutRecord workout={record} />

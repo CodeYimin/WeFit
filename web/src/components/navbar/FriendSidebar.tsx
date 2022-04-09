@@ -16,7 +16,9 @@ import React, { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useAcceptFriendRequestMutation,
+  useCancelFriendRequestMutation,
   useGetFriendRequestsQuery,
+  useRejectFriendRequestMutation,
   useRemoveFriendMutation,
   useSendFriendRequestMutation,
 } from "../../graphql/generated/graphql";
@@ -45,6 +47,14 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
   });
 
   const [acceptFriendRequest] = useAcceptFriendRequestMutation({
+    refetchQueries: "active",
+  });
+
+  const [rejectFriendRequest] = useRejectFriendRequestMutation({
+    refetchQueries: "active",
+  });
+
+  const [cancelFriendRequest] = useCancelFriendRequestMutation({
     refetchQueries: "active",
   });
 
@@ -119,6 +129,17 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                         >
                           Accept
                         </XSButton>
+                        <XSButton
+                          onClick={async () => {
+                            await rejectFriendRequest({
+                              variables: {
+                                fromId: friendRequest.id,
+                              },
+                            });
+                          }}
+                        >
+                          Reject
+                        </XSButton>
                       </HStack>
                     </ListItem>
                   ))}
@@ -130,9 +151,22 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                 Outgoing Friend Requests:
                 <UnorderedList>
                   {me?.outgoingFriendRequests?.map((friendRequest) => (
-                    <ListItem key={friendRequest.id}>
-                      {friendRequest.username}
-                    </ListItem>
+                    <HStack>
+                      <ListItem key={friendRequest.id}>
+                        {friendRequest.username}
+                      </ListItem>
+                      <XSButton
+                        onClick={async () => {
+                          await cancelFriendRequest({
+                            variables: {
+                              toId: friendRequest.id,
+                            },
+                          });
+                        }}
+                      >
+                        Cancel
+                      </XSButton>
+                    </HStack>
                   ))}
                 </UnorderedList>
               </OutgoingFriendSection>

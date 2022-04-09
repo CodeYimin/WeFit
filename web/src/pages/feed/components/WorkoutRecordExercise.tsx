@@ -2,6 +2,7 @@ import { HStack, Text, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement } from "react";
 import { WorkoutRecordExercise as IWorkoutRecordExercise } from "../../../graphql/generated/graphql";
+import { secondsToTime } from "../../../utils/time";
 
 const ExerciseName = styled.div`
   background: #f3f3f3;
@@ -37,7 +38,7 @@ function WorkoutRecordExercise({
           <Text>Weight: </Text> <Field>{weight}lbs</Field>
         </HStack>
         <HStack>
-          <Text>Duration: </Text> <Field>{duration}s</Field>
+          <Text>Duration: </Text> <Field>{secondsToTime(duration)}s</Field>
         </HStack>
       </HStack>
     </VStack>

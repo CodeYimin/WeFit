@@ -1,10 +1,11 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
-import { ChakraProvider, theme } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import "@fontsource/roboto";
 import { ReactElement } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NavigationBar from "./components/navbar/NavigationBar";
 import FeedPage from "./pages/feed/FeedPage";
-import Home from "./pages/home/home";
+import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
@@ -15,6 +16,12 @@ const apolloClient = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
   credentials: "include",
+});
+
+const theme = extendTheme({
+  fonts: {
+    body: "Roboto, sans-serif",
+  },
 });
 
 export default function App(): ReactElement {

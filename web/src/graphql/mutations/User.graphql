@@ -38,6 +38,18 @@ mutation AcceptFriendRequest($id: ID!) {
   }
 }
 
+mutation RejectFriendRequest($fromId: ID!) {
+  rejectFriendRequest(fromId: $fromId) {
+    id
+  }
+}
+
+mutation CancelFriendRequest($toId: ID!) {
+  cancelFriendRequest(toId: $toId) {
+    id
+  }
+}
+
 mutation RemoveFriend($id: ID!) {
   removeFriend(id: $id) {
     id

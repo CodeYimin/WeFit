@@ -318,6 +318,66 @@ export const PostMutation = extendType({
       },
     });
 
+    t.nonNull.field("rejectFriendRequest", {
+      type: "User",
+      authorize: isAuth,
+      args: {
+        fromId: nonNull(idArg()),
+      },
+      async resolve(_root, { fromId }, ctx) {
+        const fromUser = await ctx.db.user.findUnique({
+          where: { id: fromId },
+        });
+
+        if (!fromUser) {
+          throw new UserInputError("User not found");
+        }
+
+        const updatedFromUser = await ctx.db.user.update({
+          where: { id: fromId },
+          data: {
+            outgoingFriendRequests: {
+              disconnect: {
+                id: ctx.req.session.userId,
+              },
+            },
+          },
+        });
+
+        return updatedFromUser;
+      },
+    });
+
+    t.nonNull.field("cancelFriendRequest", {
+      type: "User",
+      authorize: isAuth,
+      args: {
+        toId: nonNull(idArg()),
+      },
+      async resolve(_root, { toId }, ctx) {
+        const fromUser = await ctx.db.user.findUnique({
+          where: { id: toId },
+        });
+
+        if (!fromUser) {
+          throw new UserInputError("User not found");
+        }
+
+        const updatedFromUser = await ctx.db.user.update({
+          where: { id: toId },
+          data: {
+            incomingFriendRequests: {
+              disconnect: {
+                id: ctx.req.session.userId,
+              },
+            },
+          },
+        });
+
+        return updatedFromUser;
+      },
+    });
+
     t.nonNull.field("removeFriend", {
       type: "User",
       authorize: isAuth,

@@ -1,3 +1,5 @@
+import { Box, HStack, Text } from "@chakra-ui/react";
+import styled from "@emotion/styled";
 import { ReactElement, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -5,6 +7,7 @@ import {
   useWorkoutSchemaByIdQuery,
   WorkoutRecordExerciseInput,
 } from "../../graphql/generated/graphql";
+import { secondsToTime } from "../../utils/time";
 import Exercising from "./stages/Exercising";
 import WorkoutEnd from "./stages/WorkoutEnd";
 import WorkoutStart from "./stages/WorkoutStart";
@@ -79,6 +82,27 @@ function Workout({}: WorkoutProps): ReactElement {
 
   return (
     <div>
+      <Box ml="2rem" mt="2rem" position="fixed">
+        <Text fontWeight="700" fontSize="2xl">
+          Progress:{" "}
+        </Text>
+        {schema!.exercises.map((exercise, index) => (
+          <HStack>
+            <ExerciseOutline current={index === exerciseIndex}>
+              {exercise.name}:
+            </ExerciseOutline>
+            {Number.isInteger(recordItems[index]?.duration) && (
+              <Box>{secondsToTime(recordItems[index]?.duration)}s</Box>
+            )}
+            {Number.isInteger(recordItems[index]?.reps) && (
+              <Box>{recordItems[index]?.reps}reps</Box>
+            )}
+            {Number.isInteger(recordItems[index]?.weight) && (
+              <Box>{recordItems[index]?.weight}lbs</Box>
+            )}
+          </HStack>
+        ))}
+      </Box>
       {schema!.exercises.map(
         (exercise, index) =>
           exerciseIndex === index && (
@@ -91,5 +115,12 @@ function Workout({}: WorkoutProps): ReactElement {
     </div>
   );
 }
+
+const ExerciseOutline = styled.div<{ current: boolean }>`
+  font-weight: ${(props) => (props.current ? "700" : "400")};
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid ${(props) => (props.current ? "black" : "none")};
+`;
 
 export default Workout;

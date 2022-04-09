@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { Text, VStack } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { Button } from "../../components/Button";
 import {
@@ -21,7 +21,11 @@ function Workouts({}: WorkoutsProps): ReactElement {
   }
 
   return (
-    <VStack spacing="2rem" mt="5rem">
+    <VStack spacing="2rem" mt="3rem">
+      <VStack spacing="0">
+        <Text fontSize="6xl">Workouts</Text>
+        <Text fontSize="2xl">Manage your workout Programs</Text>
+      </VStack>
       <Button
         onClick={async () => {
           await createWorkoutSchema({

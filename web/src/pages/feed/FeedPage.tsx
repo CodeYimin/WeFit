@@ -1,4 +1,4 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Center, Text, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement } from "react";
 import { useAllWorkoutRecordsQuery } from "../../graphql/generated/graphql";
@@ -23,9 +23,13 @@ function FeedPage({}: FeedPageProps): ReactElement {
   }
 
   return (
-    <Box my="3rem">
+    <VStack my="3rem">
+      <VStack spacing="0" mb="5rem">
+        <Text fontSize="6xl">Feed</Text>
+        <Text fontSize="2xl">View your friends' workouts</Text>
+      </VStack>
       <FeedSection workouts={allWorkoutRecords!} />
-    </Box>
+    </VStack>
   );
 }
 

@@ -22,6 +22,15 @@ query UserById($id: ID!) {
         username
       }
     }
+    friends {
+      id
+    }
+    outgoingFriendRequests {
+      id
+    }
+    incomingFriendRequests {
+      id
+    }
   }
 }
 
