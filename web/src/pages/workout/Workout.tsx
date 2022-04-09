@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   useCreateWorkoutRecordMutation,
   useWorkoutSchemaByIdQuery,
@@ -12,6 +12,7 @@ import WorkoutStart from "./stages/WorkoutStart";
 interface WorkoutProps {}
 
 function Workout({}: WorkoutProps): ReactElement {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const schemaId = searchParams.get("schemaId");
 
@@ -32,11 +33,6 @@ function Workout({}: WorkoutProps): ReactElement {
   );
 
   const [createWorkoutRecord] = useCreateWorkoutRecordMutation({
-    variables: {
-      workoutSchemaId: schemaId!,
-      name: "Unnamed Workout",
-      exercises: recordItems,
-    },
     refetchQueries: "active",
   });
 
@@ -53,14 +49,28 @@ function Workout({}: WorkoutProps): ReactElement {
   }
 
   if (ended) {
-    return <WorkoutEnd />;
+    return (
+      <WorkoutEnd
+        onFinish={async (name) => {
+          await createWorkoutRecord({
+            variables: {
+              workoutSchemaId: schemaId!,
+              name: name || "Unnamed Workout",
+              exercises: recordItems,
+            },
+          });
+          navigate("/");
+          location.reload();
+        }}
+      />
+    );
   }
 
   function handleExerciseComplete(recordItem: WorkoutRecordExerciseInput) {
+    console.log("end");
     if (exerciseIndex + 1 < schema!.exercises.length) {
       setExerciseIndex(exerciseIndex + 1);
     } else {
-      createWorkoutRecord();
       setEnded(true);
     }
 
@@ -68,10 +78,17 @@ function Workout({}: WorkoutProps): ReactElement {
   }
 
   return (
-    <Exercising
-      exercise={schema.exercises[exerciseIndex]}
-      onComplete={handleExerciseComplete}
-    />
+    <div>
+      {schema!.exercises.map(
+        (exercise, index) =>
+          exerciseIndex === index && (
+            <Exercising
+              exercise={exercise}
+              onComplete={handleExerciseComplete}
+            />
+          )
+      )}
+    </div>
   );
 }
 

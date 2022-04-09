@@ -15,6 +15,7 @@ const ExerciseName = styled.input`
   padding: 0.5rem 1.5rem;
   border-radius: 0.75rem;
   width: 100%;
+  font-weight: bold;
 `;
 
 const FieldInput = styled.input`
@@ -89,7 +90,7 @@ function WorkoutExerciseEditor({
                   submitForm();
                 }}
               />
-              <HStack w="full">
+              <HStack w="full" spacing="1.5rem">
                 <Box>
                   Reps:{" "}
                   <FieldInput
@@ -111,6 +112,7 @@ function WorkoutExerciseEditor({
                     }}
                     value={data?.weight?.toString() || ""}
                   />
+                  lbs
                 </Box>
                 <Box>
                   Duration:{" "}
@@ -122,6 +124,7 @@ function WorkoutExerciseEditor({
                     }}
                     value={data?.duration?.toString() || ""}
                   />
+                  s
                 </Box>
               </HStack>
             </VStack>

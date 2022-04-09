@@ -63,7 +63,7 @@ export const WorkoutSchemaQuery = extendType({
     });
     t.nonNull.field("workoutSchemaById", {
       type: "WorkoutSchema",
-      authorize: isAuthWorkoutSchema,
+      authorize: isAuth,
       args: {
         workoutSchemaId: nonNull(idArg()),
       },
@@ -76,6 +76,10 @@ export const WorkoutSchemaQuery = extendType({
             user: true,
           },
         });
+
+        if (!workoutSchema) {
+          throw new Error("WorkoutSchema not found");
+        }
 
         return workoutSchema!;
       },
@@ -104,11 +108,32 @@ export const WorkoutSchemaMutation = extendType({
       },
     });
 
+    t.nonNull.field("updateWorkoutSchema", {
+      type: "WorkoutSchema",
+      authorize: isAuthWorkoutSchema,
+      args: {
+        workoutSchemaId: nonNull(idArg()),
+        name: nonNull(stringArg()),
+      },
+      async resolve(_root, args, ctx) {
+        const workoutSchema = await ctx.db.workoutSchema.update({
+          where: {
+            id: args.workoutSchemaId,
+          },
+          data: {
+            name: args.name,
+          },
+        });
+
+        return workoutSchema;
+      },
+    });
+
     t.nonNull.field("deleteWorkoutSchema", {
       type: "Boolean",
       authorize: isAuth,
       args: {
-        id: nonNull(stringArg()),
+        id: nonNull(idArg()),
       },
       async resolve(_root, { id }, ctx) {
         const workoutSchema = await ctx.db.workoutSchema.findFirst({

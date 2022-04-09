@@ -31,6 +31,7 @@ function Exercising({
     reps: reps || 0,
     weight: weight || 0,
   });
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -60,7 +61,8 @@ function Exercising({
           }}
         />
       );
-    } else {
+    } else if (!completed) {
+      setCompleted(true);
       onComplete(recordItem);
     }
   }
@@ -73,7 +75,7 @@ function Exercising({
       {weight && <Text fontSize="4xl">Weight Goal: {weight}lbs</Text>}
       {reps && <Text fontSize="4xl">Rep Goal: {reps}</Text>}
       <Text fontSize="6xl">Doing {name}</Text>
-      <Text fontSize="4xl">{secondsToTime(timer)}</Text>
+      <Text fontSize="4xl">{secondsToTime(timer)}s</Text>
       <Box pt="2rem">
         <XLButton
           onClick={() => {

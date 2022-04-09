@@ -4,45 +4,42 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
+  HStack,
+  ListItem,
+  Text,
+  UnorderedList,
+  VStack,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { Formik } from "formik";
 import React, { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useAcceptFriendRequestMutation,
   useGetFriendRequestsQuery,
   useRemoveFriendMutation,
   useSendFriendRequestMutation,
 } from "../../graphql/generated/graphql";
+import { Button, XSButton } from "../Button";
+import { Input } from "../Input";
 
 interface FriendSidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const FriendsSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  height: 100%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-right: 0.25rem;
-  margin-left: 0.25rem;
-`;
-
 const CurrentFriendsSection = styled.div``;
 
-const SendFriendRequestSection = styled.div``;
+const FriendRequestForm = styled.form`
+  text-align: center;
+`;
 
 const IncomingFriendSection = styled.div``;
 
 const OutgoingFriendSection = styled.div``;
 
-const RemoveFriendsSection = styled.div``;
-
 function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
+  const navigate = useNavigate();
   const [sendFriendRequest] = useSendFriendRequestMutation({
     refetchQueries: "active",
   });
@@ -58,104 +55,134 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
 
   return (
     <>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+      <Drawer isOpen={isOpen} size="sm" placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent p="2rem">
           <DrawerCloseButton />
-          <DrawerHeader>Friends</DrawerHeader>
-          <FriendsSection>
-            <CurrentFriendsSection>
-              Friends:
-              {me?.friends.map((friend) => (
-                <div key={friend.id}>{friend.username}</div>
-              ))}
-            </CurrentFriendsSection>
-            <SendFriendRequestSection>
-              <div>
-                <Formik
-                  initialValues={{
-                    username: "",
-                  }}
-                  onSubmit={async (values, { setSubmitting }) => {
-                    await sendFriendRequest({
-                      variables: {
-                        username: values.username,
-                      },
-                    });
-                    setSubmitting(false);
-                  }}
-                >
-                  {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    isSubmitting,
-                  }) => (
-                    <form onSubmit={handleSubmit}>
-                      <input
-                        type="text"
-                        name="username"
-                        placeholder="Friend's username"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.username}
-                      />
-                      <button type="submit" disabled={isSubmitting}>
-                        Send Friend Request
-                      </button>
-                    </form>
-                  )}
-                </Formik>
-              </div>
-            </SendFriendRequestSection>
-            <IncomingFriendSection>
-              Incoming Friend Requests:
-              {me?.incomingFriendRequests?.map((friendRequest) => (
-                <div>
-                  <button
-                    key={friendRequest.id}
-                    onClick={async () => {
-                      await acceptFriendRequest({
-                        variables: {
-                          id: friendRequest.id,
-                        },
-                      });
-                    }}
-                  >
-                    {friendRequest.username}
-                  </button>
-                </div>
-              ))}
-            </IncomingFriendSection>
-            <OutgoingFriendSection>
-              Outgoing Friend Requests:
-              {me?.outgoingFriendRequests?.map((friendRequest) => (
-                <p key={friendRequest.id}>{friendRequest.username}</p>
-              ))}
-            </OutgoingFriendSection>
-            <RemoveFriendsSection>
-              Remove Friends:
-              {me?.friends.map((friend) => (
-                <div>
-                  <button
-                    key={friend.id}
-                    onClick={async () => {
-                      await removeFriend({
-                        variables: {
-                          id: friend.id,
-                        },
-                      });
-                    }}
-                  >
-                    {friend.username}
-                  </button>
-                </div>
-              ))}
-            </RemoveFriendsSection>
-          </FriendsSection>
+          <DrawerHeader fontSize="1.5rem" fontWeight="bold" mx="auto">
+            Friends
+          </DrawerHeader>
+          <VStack justifyContent="space-between" h="full">
+            <VStack spacing="1rem" alignItems="start">
+              <CurrentFriendsSection>
+                Friends:
+                <UnorderedList>
+                  {me?.friends.map((friend) => (
+                    <ListItem key={friend.id}>
+                      <HStack>
+                        <Text
+                          _hover={{ cursor: "pointer" }}
+                          onClick={() => navigate(`/profile/${friend.id}`)}
+                        >
+                          {friend.username}
+                        </Text>
+                        <XSButton
+                          onClick={async () => {
+                            await removeFriend({
+                              variables: {
+                                id: friend.id,
+                              },
+                            });
+                          }}
+                        >
+                          Remove
+                        </XSButton>
+                      </HStack>
+                    </ListItem>
+                  ))}
+                </UnorderedList>
+              </CurrentFriendsSection>
+              <IncomingFriendSection
+                hidden={!me?.incomingFriendRequests?.length}
+              >
+                Incoming Friend Requests:
+                <UnorderedList>
+                  {me?.incomingFriendRequests?.map((friendRequest) => (
+                    <ListItem key={friendRequest.id}>
+                      <HStack>
+                        <Text
+                          _hover={{ cursor: "pointer" }}
+                          onClick={() =>
+                            navigate(`/profile/${friendRequest.id}`)
+                          }
+                        >
+                          {friendRequest.username}
+                        </Text>
+                        <XSButton
+                          onClick={async () => {
+                            await acceptFriendRequest({
+                              variables: {
+                                id: friendRequest.id,
+                              },
+                            });
+                          }}
+                        >
+                          Accept
+                        </XSButton>
+                      </HStack>
+                    </ListItem>
+                  ))}
+                </UnorderedList>
+              </IncomingFriendSection>
+              <OutgoingFriendSection
+                hidden={!me?.outgoingFriendRequests?.length}
+              >
+                Outgoing Friend Requests:
+                <UnorderedList>
+                  {me?.outgoingFriendRequests?.map((friendRequest) => (
+                    <ListItem key={friendRequest.id}>
+                      {friendRequest.username}
+                    </ListItem>
+                  ))}
+                </UnorderedList>
+              </OutgoingFriendSection>
+            </VStack>
+            <Formik
+              initialValues={{
+                username: "",
+              }}
+              onSubmit={async (values, { setErrors }) => {
+                const { errors } = await sendFriendRequest({
+                  variables: {
+                    username: values.username,
+                  },
+                  errorPolicy: "all",
+                });
+
+                if (errors?.length) {
+                  setErrors({ username: errors[0].message });
+                }
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <FriendRequestForm onSubmit={handleSubmit}>
+                  <VStack>
+                    <Input
+                      type="text"
+                      name="username"
+                      placeholder="Send a friend request to username..."
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                      style={{ width: "20rem" }}
+                    />
+                    <Text>{errors.username}</Text>
+                    <Button type="submit" disabled={isSubmitting}>
+                      Send Friend Request
+                    </Button>
+                  </VStack>
+                </FriendRequestForm>
+              )}
+            </Formik>
+          </VStack>
         </DrawerContent>
       </Drawer>
     </>

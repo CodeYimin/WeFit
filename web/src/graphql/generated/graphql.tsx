@@ -29,11 +29,14 @@ export type Mutation = {
   createWorkoutSchema: WorkoutSchema;
   deleteWorkoutSchema: Scalars['Boolean'];
   deleteWorkoutSchemaExercise: WorkoutSchemaExercise;
+  likeWorkoutRecord: WorkoutRecord;
   login: UserAndErrorResponse;
   logout: Scalars['Boolean'];
   register: UserAndErrorResponse;
   removeFriend: User;
   sendFriendRequest: User;
+  unlikeWorkoutRecord: WorkoutRecord;
+  updateWorkoutSchema: WorkoutSchema;
   updateWorkoutSchemaExercise: WorkoutSchemaExercise;
 };
 
@@ -62,12 +65,17 @@ export type MutationCreateWorkoutSchemaArgs = {
 
 
 export type MutationDeleteWorkoutSchemaArgs = {
-  id: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
 export type MutationDeleteWorkoutSchemaExerciseArgs = {
   exerciseId: Scalars['ID'];
+};
+
+
+export type MutationLikeWorkoutRecordArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -93,6 +101,17 @@ export type MutationSendFriendRequestArgs = {
 };
 
 
+export type MutationUnlikeWorkoutRecordArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateWorkoutSchemaArgs = {
+  name: Scalars['String'];
+  workoutSchemaId: Scalars['ID'];
+};
+
+
 export type MutationUpdateWorkoutSchemaExerciseArgs = {
   data: WorkoutSchemaExerciseInput;
   exerciseId: Scalars['ID'];
@@ -100,9 +119,10 @@ export type MutationUpdateWorkoutSchemaExerciseArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  allWorkoutRecords: Array<WorkoutRecord>;
   me: User;
   userById?: Maybe<User>;
-  workoutRecords: Array<WorkoutRecord>;
+  workoutRecordsByUserId: Array<WorkoutRecord>;
   workoutSchemaById: WorkoutSchema;
   workoutSchemas: Array<WorkoutSchema>;
 };
@@ -110,6 +130,11 @@ export type Query = {
 
 export type QueryUserByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryWorkoutRecordsByUserIdArgs = {
+  userId: Scalars['ID'];
 };
 
 
@@ -122,8 +147,9 @@ export type User = {
   friends: Array<User>;
   id: Scalars['ID'];
   incomingFriendRequests: Array<User>;
-  outgoingFriendRequests?: Maybe<Array<User>>;
+  outgoingFriendRequests: Array<User>;
   username: Scalars['String'];
+  workoutRecords: Array<WorkoutRecord>;
 };
 
 export type UserAndErrorResponse = {
@@ -134,9 +160,13 @@ export type UserAndErrorResponse = {
 
 export type WorkoutRecord = {
   __typename?: 'WorkoutRecord';
+  createdAt: Scalars['String'];
   exercises: Array<WorkoutRecordExercise>;
   id: Scalars['ID'];
+  likedBy: Array<User>;
+  name: Scalars['String'];
   user: User;
+  workoutSchemaId: Scalars['ID'];
 };
 
 export type WorkoutRecordExercise = {
@@ -230,12 +260,31 @@ export type CreateWorkoutRecordMutationVariables = Exact<{
 
 export type CreateWorkoutRecordMutation = { __typename?: 'Mutation', createWorkoutRecord: { __typename?: 'WorkoutRecord', id: string } };
 
+export type AllWorkoutRecordsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllWorkoutRecordsQuery = { __typename?: 'Query', allWorkoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }> };
+
+export type LikeWorkoutRecordMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LikeWorkoutRecordMutation = { __typename?: 'Mutation', likeWorkoutRecord: { __typename?: 'WorkoutRecord', id: string } };
+
+export type UnlikeWorkoutRecordMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlikeWorkoutRecordMutation = { __typename?: 'Mutation', unlikeWorkoutRecord: { __typename?: 'WorkoutRecord', id: string } };
+
 export type UserByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string } | null };
+export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string, username: string, workoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }> } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -245,7 +294,7 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: str
 export type GetFriendRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetFriendRequestsQuery = { __typename?: 'Query', me: { __typename?: 'User', incomingFriendRequests: Array<{ __typename?: 'User', id: string, username: string }>, outgoingFriendRequests?: Array<{ __typename?: 'User', id: string, username: string }> | null, friends: Array<{ __typename?: 'User', id: string, username: string }> } };
+export type GetFriendRequestsQuery = { __typename?: 'Query', me: { __typename?: 'User', incomingFriendRequests: Array<{ __typename?: 'User', id: string, username: string }>, outgoingFriendRequests: Array<{ __typename?: 'User', id: string, username: string }>, friends: Array<{ __typename?: 'User', id: string, username: string }> } };
 
 export type WorkoutSchemasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -265,6 +314,21 @@ export type WorkoutSchemaByIdQueryVariables = Exact<{
 
 
 export type WorkoutSchemaByIdQuery = { __typename?: 'Query', workoutSchemaById: { __typename?: 'WorkoutSchema', id: string, name: string, exercises: Array<{ __typename?: 'WorkoutSchemaExercise', id: string, name: string, reps?: number | null, weight?: number | null, duration?: number | null }> } };
+
+export type UpdateWorkoutSchemaMutationVariables = Exact<{
+  workoutSchemaId: Scalars['ID'];
+  name: Scalars['String'];
+}>;
+
+
+export type UpdateWorkoutSchemaMutation = { __typename?: 'Mutation', updateWorkoutSchema: { __typename?: 'WorkoutSchema', id: string } };
+
+export type DeleteWorkoutSchemaMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteWorkoutSchemaMutation = { __typename?: 'Mutation', deleteWorkoutSchema: boolean };
 
 export type AddWorkoutSchemaExerciseMutationVariables = Exact<{
   workoutSchemaId: Scalars['ID'];
@@ -538,10 +602,148 @@ export function useCreateWorkoutRecordMutation(baseOptions?: Apollo.MutationHook
 export type CreateWorkoutRecordMutationHookResult = ReturnType<typeof useCreateWorkoutRecordMutation>;
 export type CreateWorkoutRecordMutationResult = Apollo.MutationResult<CreateWorkoutRecordMutation>;
 export type CreateWorkoutRecordMutationOptions = Apollo.BaseMutationOptions<CreateWorkoutRecordMutation, CreateWorkoutRecordMutationVariables>;
+export const AllWorkoutRecordsDocument = gql`
+    query AllWorkoutRecords {
+  allWorkoutRecords {
+    id
+    name
+    createdAt
+    workoutSchemaId
+    likedBy {
+      id
+    }
+    exercises {
+      id
+      name
+      reps
+      weight
+      duration
+    }
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllWorkoutRecordsQuery__
+ *
+ * To run a query within a React component, call `useAllWorkoutRecordsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllWorkoutRecordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllWorkoutRecordsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllWorkoutRecordsQuery(baseOptions?: Apollo.QueryHookOptions<AllWorkoutRecordsQuery, AllWorkoutRecordsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllWorkoutRecordsQuery, AllWorkoutRecordsQueryVariables>(AllWorkoutRecordsDocument, options);
+      }
+export function useAllWorkoutRecordsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllWorkoutRecordsQuery, AllWorkoutRecordsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllWorkoutRecordsQuery, AllWorkoutRecordsQueryVariables>(AllWorkoutRecordsDocument, options);
+        }
+export type AllWorkoutRecordsQueryHookResult = ReturnType<typeof useAllWorkoutRecordsQuery>;
+export type AllWorkoutRecordsLazyQueryHookResult = ReturnType<typeof useAllWorkoutRecordsLazyQuery>;
+export type AllWorkoutRecordsQueryResult = Apollo.QueryResult<AllWorkoutRecordsQuery, AllWorkoutRecordsQueryVariables>;
+export const LikeWorkoutRecordDocument = gql`
+    mutation LikeWorkoutRecord($id: ID!) {
+  likeWorkoutRecord(id: $id) {
+    id
+  }
+}
+    `;
+export type LikeWorkoutRecordMutationFn = Apollo.MutationFunction<LikeWorkoutRecordMutation, LikeWorkoutRecordMutationVariables>;
+
+/**
+ * __useLikeWorkoutRecordMutation__
+ *
+ * To run a mutation, you first call `useLikeWorkoutRecordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeWorkoutRecordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likeWorkoutRecordMutation, { data, loading, error }] = useLikeWorkoutRecordMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLikeWorkoutRecordMutation(baseOptions?: Apollo.MutationHookOptions<LikeWorkoutRecordMutation, LikeWorkoutRecordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikeWorkoutRecordMutation, LikeWorkoutRecordMutationVariables>(LikeWorkoutRecordDocument, options);
+      }
+export type LikeWorkoutRecordMutationHookResult = ReturnType<typeof useLikeWorkoutRecordMutation>;
+export type LikeWorkoutRecordMutationResult = Apollo.MutationResult<LikeWorkoutRecordMutation>;
+export type LikeWorkoutRecordMutationOptions = Apollo.BaseMutationOptions<LikeWorkoutRecordMutation, LikeWorkoutRecordMutationVariables>;
+export const UnlikeWorkoutRecordDocument = gql`
+    mutation UnlikeWorkoutRecord($id: ID!) {
+  unlikeWorkoutRecord(id: $id) {
+    id
+  }
+}
+    `;
+export type UnlikeWorkoutRecordMutationFn = Apollo.MutationFunction<UnlikeWorkoutRecordMutation, UnlikeWorkoutRecordMutationVariables>;
+
+/**
+ * __useUnlikeWorkoutRecordMutation__
+ *
+ * To run a mutation, you first call `useUnlikeWorkoutRecordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlikeWorkoutRecordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlikeWorkoutRecordMutation, { data, loading, error }] = useUnlikeWorkoutRecordMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUnlikeWorkoutRecordMutation(baseOptions?: Apollo.MutationHookOptions<UnlikeWorkoutRecordMutation, UnlikeWorkoutRecordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlikeWorkoutRecordMutation, UnlikeWorkoutRecordMutationVariables>(UnlikeWorkoutRecordDocument, options);
+      }
+export type UnlikeWorkoutRecordMutationHookResult = ReturnType<typeof useUnlikeWorkoutRecordMutation>;
+export type UnlikeWorkoutRecordMutationResult = Apollo.MutationResult<UnlikeWorkoutRecordMutation>;
+export type UnlikeWorkoutRecordMutationOptions = Apollo.BaseMutationOptions<UnlikeWorkoutRecordMutation, UnlikeWorkoutRecordMutationVariables>;
 export const UserByIdDocument = gql`
     query UserById($id: ID!) {
   userById(id: $id) {
     id
+    username
+    workoutRecords {
+      id
+      name
+      createdAt
+      workoutSchemaId
+      likedBy {
+        id
+      }
+      exercises {
+        id
+        name
+        reps
+        weight
+        duration
+      }
+      user {
+        id
+        username
+      }
+    }
   }
 }
     `;
@@ -771,6 +973,71 @@ export function useWorkoutSchemaByIdLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type WorkoutSchemaByIdQueryHookResult = ReturnType<typeof useWorkoutSchemaByIdQuery>;
 export type WorkoutSchemaByIdLazyQueryHookResult = ReturnType<typeof useWorkoutSchemaByIdLazyQuery>;
 export type WorkoutSchemaByIdQueryResult = Apollo.QueryResult<WorkoutSchemaByIdQuery, WorkoutSchemaByIdQueryVariables>;
+export const UpdateWorkoutSchemaDocument = gql`
+    mutation UpdateWorkoutSchema($workoutSchemaId: ID!, $name: String!) {
+  updateWorkoutSchema(workoutSchemaId: $workoutSchemaId, name: $name) {
+    id
+  }
+}
+    `;
+export type UpdateWorkoutSchemaMutationFn = Apollo.MutationFunction<UpdateWorkoutSchemaMutation, UpdateWorkoutSchemaMutationVariables>;
+
+/**
+ * __useUpdateWorkoutSchemaMutation__
+ *
+ * To run a mutation, you first call `useUpdateWorkoutSchemaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateWorkoutSchemaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateWorkoutSchemaMutation, { data, loading, error }] = useUpdateWorkoutSchemaMutation({
+ *   variables: {
+ *      workoutSchemaId: // value for 'workoutSchemaId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateWorkoutSchemaMutation(baseOptions?: Apollo.MutationHookOptions<UpdateWorkoutSchemaMutation, UpdateWorkoutSchemaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateWorkoutSchemaMutation, UpdateWorkoutSchemaMutationVariables>(UpdateWorkoutSchemaDocument, options);
+      }
+export type UpdateWorkoutSchemaMutationHookResult = ReturnType<typeof useUpdateWorkoutSchemaMutation>;
+export type UpdateWorkoutSchemaMutationResult = Apollo.MutationResult<UpdateWorkoutSchemaMutation>;
+export type UpdateWorkoutSchemaMutationOptions = Apollo.BaseMutationOptions<UpdateWorkoutSchemaMutation, UpdateWorkoutSchemaMutationVariables>;
+export const DeleteWorkoutSchemaDocument = gql`
+    mutation DeleteWorkoutSchema($id: ID!) {
+  deleteWorkoutSchema(id: $id)
+}
+    `;
+export type DeleteWorkoutSchemaMutationFn = Apollo.MutationFunction<DeleteWorkoutSchemaMutation, DeleteWorkoutSchemaMutationVariables>;
+
+/**
+ * __useDeleteWorkoutSchemaMutation__
+ *
+ * To run a mutation, you first call `useDeleteWorkoutSchemaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteWorkoutSchemaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteWorkoutSchemaMutation, { data, loading, error }] = useDeleteWorkoutSchemaMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteWorkoutSchemaMutation(baseOptions?: Apollo.MutationHookOptions<DeleteWorkoutSchemaMutation, DeleteWorkoutSchemaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteWorkoutSchemaMutation, DeleteWorkoutSchemaMutationVariables>(DeleteWorkoutSchemaDocument, options);
+      }
+export type DeleteWorkoutSchemaMutationHookResult = ReturnType<typeof useDeleteWorkoutSchemaMutation>;
+export type DeleteWorkoutSchemaMutationResult = Apollo.MutationResult<DeleteWorkoutSchemaMutation>;
+export type DeleteWorkoutSchemaMutationOptions = Apollo.BaseMutationOptions<DeleteWorkoutSchemaMutation, DeleteWorkoutSchemaMutationVariables>;
 export const AddWorkoutSchemaExerciseDocument = gql`
     mutation AddWorkoutSchemaExercise($workoutSchemaId: ID!, $name: String!) {
   addWorkoutSchemaExercise(workoutSchemaId: $workoutSchemaId, name: $name) {

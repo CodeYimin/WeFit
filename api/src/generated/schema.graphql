@@ -12,20 +12,24 @@ type Mutation {
   addWorkoutSchemaExercise(name: String!, workoutSchemaId: ID!): WorkoutSchemaExercise!
   createWorkoutRecord(exercises: [WorkoutRecordExerciseInput!]!, name: String!, workoutSchemaId: ID!): WorkoutRecord!
   createWorkoutSchema(name: String!): WorkoutSchema!
-  deleteWorkoutSchema(id: String!): Boolean!
+  deleteWorkoutSchema(id: ID!): Boolean!
   deleteWorkoutSchemaExercise(exerciseId: ID!): WorkoutSchemaExercise!
+  likeWorkoutRecord(id: ID!): WorkoutRecord!
   login(password: String!, username: String!): UserAndErrorResponse!
   logout: Boolean!
   register(password: String!, username: String!): UserAndErrorResponse!
   removeFriend(id: ID!): User!
   sendFriendRequest(username: String!): User!
+  unlikeWorkoutRecord(id: ID!): WorkoutRecord!
+  updateWorkoutSchema(name: String!, workoutSchemaId: ID!): WorkoutSchema!
   updateWorkoutSchemaExercise(data: WorkoutSchemaExerciseInput!, exerciseId: ID!): WorkoutSchemaExercise!
 }
 
 type Query {
+  allWorkoutRecords: [WorkoutRecord!]!
   me: User!
   userById(id: ID!): User
-  workoutRecords: [WorkoutRecord!]!
+  workoutRecordsByUserId(userId: ID!): [WorkoutRecord!]!
   workoutSchemaById(workoutSchemaId: ID!): WorkoutSchema!
   workoutSchemas: [WorkoutSchema!]!
 }
@@ -34,8 +38,9 @@ type User {
   friends: [User!]!
   id: ID!
   incomingFriendRequests: [User!]!
-  outgoingFriendRequests: [User!]
+  outgoingFriendRequests: [User!]!
   username: String!
+  workoutRecords: [WorkoutRecord!]!
 }
 
 type UserAndErrorResponse {
@@ -44,9 +49,13 @@ type UserAndErrorResponse {
 }
 
 type WorkoutRecord {
+  createdAt: String!
   exercises: [WorkoutRecordExercise!]!
   id: ID!
+  likedBy: [User!]!
+  name: String!
   user: User!
+  workoutSchemaId: ID!
 }
 
 type WorkoutRecordExercise {

@@ -1,7 +1,7 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { ReactElement, useState } from "react";
 import { XLButton } from "../../../components/Button";
-import { Input } from "../../../components/Input";
+import { XLInput } from "../../../components/Input";
 
 interface RepSelectionProps {
   initialValue?: string;
@@ -18,7 +18,7 @@ function RepSelection({
     <VStack spacing="2rem" h="100vh" justifyContent="center">
       <Text fontSize="6xl">How Many Reps Did You Do?</Text>
       <Box>
-        <Input
+        <XLInput
           onChange={(event) => {
             if (event.target.value && !event.target.value.match(/^\d+$/)) {
               return;

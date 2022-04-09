@@ -1,9 +1,23 @@
 import styled from "@emotion/styled";
 
 export const Button = styled.button`
-  background: #f3f3f3;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #f3f3f3;
+  border-radius: 0.5rem;
+  transition: 0.3s;
+  &:hover {
+    background-color: lightgray;
+  }
+`;
+
+export const XSButton = styled.button`
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f3f3;
+  border-radius: 0.25rem;
+  transition: 0.3s;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 
 export const XLButton = styled.button`

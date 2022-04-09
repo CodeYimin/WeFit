@@ -57,6 +57,8 @@ export interface NexusGenObjects {
   }
   WorkoutRecord: { // root type
     id: string; // ID!
+    name: string; // String!
+    workoutSchemaId: string; // ID!
   }
   WorkoutRecordExercise: { // root type
     duration: number; // Int!
@@ -100,17 +102,21 @@ export interface NexusGenFieldTypes {
     createWorkoutSchema: NexusGenRootTypes['WorkoutSchema']; // WorkoutSchema!
     deleteWorkoutSchema: boolean; // Boolean!
     deleteWorkoutSchemaExercise: NexusGenRootTypes['WorkoutSchemaExercise']; // WorkoutSchemaExercise!
+    likeWorkoutRecord: NexusGenRootTypes['WorkoutRecord']; // WorkoutRecord!
     login: NexusGenRootTypes['UserAndErrorResponse']; // UserAndErrorResponse!
     logout: boolean; // Boolean!
     register: NexusGenRootTypes['UserAndErrorResponse']; // UserAndErrorResponse!
     removeFriend: NexusGenRootTypes['User']; // User!
     sendFriendRequest: NexusGenRootTypes['User']; // User!
+    unlikeWorkoutRecord: NexusGenRootTypes['WorkoutRecord']; // WorkoutRecord!
+    updateWorkoutSchema: NexusGenRootTypes['WorkoutSchema']; // WorkoutSchema!
     updateWorkoutSchemaExercise: NexusGenRootTypes['WorkoutSchemaExercise']; // WorkoutSchemaExercise!
   }
   Query: { // field return type
+    allWorkoutRecords: NexusGenRootTypes['WorkoutRecord'][]; // [WorkoutRecord!]!
     me: NexusGenRootTypes['User']; // User!
     userById: NexusGenRootTypes['User'] | null; // User
-    workoutRecords: NexusGenRootTypes['WorkoutRecord'][]; // [WorkoutRecord!]!
+    workoutRecordsByUserId: NexusGenRootTypes['WorkoutRecord'][]; // [WorkoutRecord!]!
     workoutSchemaById: NexusGenRootTypes['WorkoutSchema']; // WorkoutSchema!
     workoutSchemas: NexusGenRootTypes['WorkoutSchema'][]; // [WorkoutSchema!]!
   }
@@ -118,17 +124,22 @@ export interface NexusGenFieldTypes {
     friends: NexusGenRootTypes['User'][]; // [User!]!
     id: string; // ID!
     incomingFriendRequests: NexusGenRootTypes['User'][]; // [User!]!
-    outgoingFriendRequests: NexusGenRootTypes['User'][] | null; // [User!]
+    outgoingFriendRequests: NexusGenRootTypes['User'][]; // [User!]!
     username: string; // String!
+    workoutRecords: NexusGenRootTypes['WorkoutRecord'][]; // [WorkoutRecord!]!
   }
   UserAndErrorResponse: { // field return type
     errors: NexusGenRootTypes['FieldError'][] | null; // [FieldError!]
     user: NexusGenRootTypes['User'] | null; // User
   }
   WorkoutRecord: { // field return type
+    createdAt: string; // String!
     exercises: NexusGenRootTypes['WorkoutRecordExercise'][]; // [WorkoutRecordExercise!]!
     id: string; // ID!
+    likedBy: NexusGenRootTypes['User'][]; // [User!]!
+    name: string; // String!
     user: NexusGenRootTypes['User']; // User!
+    workoutSchemaId: string; // ID!
   }
   WorkoutRecordExercise: { // field return type
     duration: number; // Int!
@@ -164,17 +175,21 @@ export interface NexusGenFieldTypeNames {
     createWorkoutSchema: 'WorkoutSchema'
     deleteWorkoutSchema: 'Boolean'
     deleteWorkoutSchemaExercise: 'WorkoutSchemaExercise'
+    likeWorkoutRecord: 'WorkoutRecord'
     login: 'UserAndErrorResponse'
     logout: 'Boolean'
     register: 'UserAndErrorResponse'
     removeFriend: 'User'
     sendFriendRequest: 'User'
+    unlikeWorkoutRecord: 'WorkoutRecord'
+    updateWorkoutSchema: 'WorkoutSchema'
     updateWorkoutSchemaExercise: 'WorkoutSchemaExercise'
   }
   Query: { // field return type name
+    allWorkoutRecords: 'WorkoutRecord'
     me: 'User'
     userById: 'User'
-    workoutRecords: 'WorkoutRecord'
+    workoutRecordsByUserId: 'WorkoutRecord'
     workoutSchemaById: 'WorkoutSchema'
     workoutSchemas: 'WorkoutSchema'
   }
@@ -184,15 +199,20 @@ export interface NexusGenFieldTypeNames {
     incomingFriendRequests: 'User'
     outgoingFriendRequests: 'User'
     username: 'String'
+    workoutRecords: 'WorkoutRecord'
   }
   UserAndErrorResponse: { // field return type name
     errors: 'FieldError'
     user: 'User'
   }
   WorkoutRecord: { // field return type name
+    createdAt: 'String'
     exercises: 'WorkoutRecordExercise'
     id: 'ID'
+    likedBy: 'User'
+    name: 'String'
     user: 'User'
+    workoutSchemaId: 'ID'
   }
   WorkoutRecordExercise: { // field return type name
     duration: 'Int'
@@ -234,10 +254,13 @@ export interface NexusGenArgTypes {
       name: string; // String!
     }
     deleteWorkoutSchema: { // args
-      id: string; // String!
+      id: string; // ID!
     }
     deleteWorkoutSchemaExercise: { // args
       exerciseId: string; // ID!
+    }
+    likeWorkoutRecord: { // args
+      id: string; // ID!
     }
     login: { // args
       password: string; // String!
@@ -253,6 +276,13 @@ export interface NexusGenArgTypes {
     sendFriendRequest: { // args
       username: string; // String!
     }
+    unlikeWorkoutRecord: { // args
+      id: string; // ID!
+    }
+    updateWorkoutSchema: { // args
+      name: string; // String!
+      workoutSchemaId: string; // ID!
+    }
     updateWorkoutSchemaExercise: { // args
       data: NexusGenInputs['WorkoutSchemaExerciseInput']; // WorkoutSchemaExerciseInput!
       exerciseId: string; // ID!
@@ -261,6 +291,9 @@ export interface NexusGenArgTypes {
   Query: {
     userById: { // args
       id: string; // ID!
+    }
+    workoutRecordsByUserId: { // args
+      userId: string; // ID!
     }
     workoutSchemaById: { // args
       workoutSchemaId: string; // ID!

@@ -11,3 +11,38 @@ mutation CreateWorkoutRecord(
     id
   }
 }
+
+query AllWorkoutRecords {
+  allWorkoutRecords {
+    id
+    name
+    createdAt
+    workoutSchemaId
+    likedBy {
+      id
+    }
+    exercises {
+      id
+      name
+      reps
+      weight
+      duration
+    }
+    user {
+      id
+      username
+    }
+  }
+}
+
+mutation LikeWorkoutRecord($id: ID!) {
+  likeWorkoutRecord(id: $id) {
+    id
+  }
+}
+
+mutation UnlikeWorkoutRecord($id: ID!) {
+  unlikeWorkoutRecord(id: $id) {
+    id
+  }
+}

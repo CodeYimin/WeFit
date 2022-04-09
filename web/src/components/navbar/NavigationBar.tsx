@@ -19,6 +19,12 @@ const BarTitle = styled.button`
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: 0.3s;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 
 const BarButtons = styled.div`
@@ -30,9 +36,15 @@ const BarButtons = styled.div`
 
 const BarButton = styled.button`
   font-size: 1.5rem;
+  padding: 0.5rem 1rem;
   font-weight: bold;
   color: #333;
   margin: 0 1rem;
+  border-radius: 0.5rem;
+  transition: 0.3s;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 
 interface NavigationBarProps {}
@@ -52,10 +64,10 @@ function NavigationBar() {
     return <></>;
   }
 
-  if (error) {
+  if (error || !me) {
     return (
       <Bar>
-        <BarTitle onClick={() => navigate("/")}>WeFit</BarTitle>
+        <BarTitle onClick={() => navigate("/home")}>WeFit</BarTitle>
         <BarButtons>
           <BarButton onClick={() => navigate("/register")}>Sign up</BarButton>
           <BarButton onClick={() => navigate("/login")}>Log In</BarButton>
@@ -68,9 +80,10 @@ function NavigationBar() {
     <>
       <FriendSidebar isOpen={friendsOpen} onClose={onFriendsClose} />
       <Bar>
-        <BarTitle onClick={() => navigate("/")}>WeFit</BarTitle>
+        <BarTitle onClick={() => navigate("/home")}>WeFit</BarTitle>
         <BarButtons>
           <BarButton onClick={() => navigate("/workouts")}>Workouts</BarButton>
+          <BarButton onClick={() => navigate("/")}>Feed</BarButton>
           <BarButton
             onClick={() => {
               onFriendsOpen();
@@ -78,9 +91,13 @@ function NavigationBar() {
           >
             Friends
           </BarButton>
+          <BarButton onClick={() => navigate(`/profile/${me.id}`)}>
+            Profile
+          </BarButton>
           <BarButton
             onClick={async () => {
               const res = await logout();
+              navigate("/home");
             }}
           >
             Logout

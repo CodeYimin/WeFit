@@ -41,7 +41,7 @@ export const User = objectType({
         return incomingFriendRequests;
       },
     });
-    t.field("outgoingFriendRequests", {
+    t.nonNull.field("outgoingFriendRequests", {
       type: list(nonNull("User")),
       async resolve(root, _args, ctx) {
         const outgoingFriendRequests = await ctx.db.user.findMany({
@@ -55,6 +55,21 @@ export const User = objectType({
         });
 
         return outgoingFriendRequests;
+      },
+    });
+    t.nonNull.list.nonNull.field("workoutRecords", {
+      type: "WorkoutRecord",
+      async resolve(root, _args, ctx) {
+        const workoutRecords = await ctx.db.workoutRecord.findMany({
+          where: {
+            userId: root.id,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        return workoutRecords;
       },
     });
   },
@@ -221,7 +236,12 @@ export const PostMutation = extendType({
       },
       async resolve(_root, { username }, ctx) {
         const toUser = await ctx.db.user.findFirst({
-          where: { username },
+          where: {
+            username: {
+              equals: username,
+              mode: "insensitive",
+            },
+          },
           include: {
             friends: true,
           },

@@ -1,6 +1,27 @@
 query UserById($id: ID!) {
   userById(id: $id) {
     id
+    username
+    workoutRecords {
+      id
+      name
+      createdAt
+      workoutSchemaId
+      likedBy {
+        id
+      }
+      exercises {
+        id
+        name
+        reps
+        weight
+        duration
+      }
+      user {
+        id
+        username
+      }
+    }
   }
 }
 

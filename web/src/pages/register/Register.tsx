@@ -1,6 +1,8 @@
+import { Box, Input, Text, VStack } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/Button";
 import { useRegisterUserMutation } from "../../graphql/generated/graphql";
 import toErrorMap from "../../utils/toErrorMap";
 
@@ -11,8 +13,8 @@ function Register({}: RegisterProps): ReactElement {
   const [registerUser] = useRegisterUserMutation({ refetchQueries: "active" });
 
   return (
-    <div>
-      <h1>Register</h1>
+    <VStack mx="auto" mt="5rem">
+      <Text fontSize="5xl">Register</Text>
       <Formik
         initialValues={{ username: "", password: "" }}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
@@ -39,30 +41,33 @@ function Register({}: RegisterProps): ReactElement {
           handleSubmit,
         }) => (
           <form onSubmit={handleSubmit}>
-            <header>Username</header>
-            <input
-              name="username"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.username}
-            />
-            {errors.username}
-            <header>Password</header>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            {errors.password}
-            <button type="submit" disabled={false}>
-              Submit
-            </button>
+            <VStack>
+              <header>Username</header>
+              <Input
+                w="20rem"
+                name="username"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.username}
+              />
+              <Box>{errors.username}</Box>
+              <header>Password</header>
+              <Input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+              />
+              <Box>{errors.password}</Box>
+              <Button type="submit" disabled={false}>
+                Register
+              </Button>
+            </VStack>
           </form>
         )}
       </Formik>
-    </div>
+    </VStack>
   );
 }
 

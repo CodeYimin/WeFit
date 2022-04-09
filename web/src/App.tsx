@@ -4,7 +4,9 @@ import { ReactElement } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NavigationBar from "./components/navbar/NavigationBar";
 import FeedPage from "./pages/feed/FeedPage";
+import Home from "./pages/home/home";
 import Login from "./pages/login/Login";
+import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
 import Workout from "./pages/workout/Workout";
 import Workouts from "./pages/workouts/Workouts";
@@ -27,6 +29,15 @@ export default function App(): ReactElement {
                 <>
                   <NavigationBar />
                   <FeedPage />
+                </>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <>
+                  <NavigationBar />
+                  <Home />
                 </>
               }
             />
@@ -54,6 +65,15 @@ export default function App(): ReactElement {
                 <>
                   <NavigationBar />
                   <Workouts />
+                </>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <>
+                  <NavigationBar />
+                  <Profile />
                 </>
               }
             />

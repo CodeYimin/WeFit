@@ -1,6 +1,11 @@
+import { Center, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement } from "react";
-import FeedBox from "../components/FeedBox";
+import {
+  User,
+  WorkoutRecord as IWorkoutRecord,
+} from "../../../graphql/generated/graphql";
+import WorkoutRecord from "../components/WorkoutRecord";
 
 const FeedColumn = styled.div`
   display: flex;
@@ -12,14 +17,26 @@ const FeedColumn = styled.div`
   gap: 1rem;
 `;
 
-interface FeedSectionProps {}
+interface FeedSectionProps {
+  workouts: (Pick<
+    IWorkoutRecord,
+    "id" | "name" | "exercises" | "createdAt" | "workoutSchemaId"
+  > & {
+    user: Pick<User, "id" | "username">;
+  } & {
+    likedBy: Pick<User, "id">[];
+  })[];
+}
 
-function FeedSection({}: FeedSectionProps): ReactElement {
+function FeedSection({ workouts }: FeedSectionProps): ReactElement {
   return (
     <div>
-      <FeedColumn>
-        <FeedBox header={"Hello am not pro"} content={"not pro I am"} />
-      </FeedColumn>
+      <VStack spacing="2rem">
+        {!workouts.length && <Center>There are no workouts posted</Center>}
+        {workouts.map((record) => (
+          <WorkoutRecord workout={record} />
+        ))}
+      </VStack>
     </div>
   );
 }

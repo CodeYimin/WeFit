@@ -13,7 +13,7 @@ function Workouts({}: WorkoutsProps): ReactElement {
   const { data: { workoutSchemas } = {} } = useWorkoutSchemasQuery();
 
   const [createWorkoutSchema] = useCreateWorkoutSchemaMutation({
-    refetchQueries: "active",
+    refetchQueries: "all",
   });
 
   if (!workoutSchemas) {
@@ -39,8 +39,3 @@ function Workouts({}: WorkoutsProps): ReactElement {
 }
 
 export default Workouts;
-function useUpdateWorkoutSchemaExerciseMutation(arg0: {
-  refetchQueries: string;
-}): [any] {
-  throw new Error("Function not implemented.");
-}

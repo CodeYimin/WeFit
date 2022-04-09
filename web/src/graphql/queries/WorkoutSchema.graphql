@@ -31,3 +31,13 @@ query WorkoutSchemaById($workoutSchemaId: ID!) {
     }
   }
 }
+
+mutation UpdateWorkoutSchema($workoutSchemaId: ID!, $name: String!) {
+  updateWorkoutSchema(workoutSchemaId: $workoutSchemaId, name: $name) {
+    id
+  }
+}
+
+mutation DeleteWorkoutSchema($id: ID!) {
+  deleteWorkoutSchema(id: $id)
+}

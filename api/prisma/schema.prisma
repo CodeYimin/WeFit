@@ -18,7 +18,7 @@ model User {
   username String @unique
   password String
 
-  workoutRecords WorkoutRecord[]
+  workoutRecords WorkoutRecord[] @relation("UserOwnedWorkoutRecords")
   workoutSchemas WorkoutSchema[]
 
   friends         User[] @relation("UserFriends")
@@ -26,6 +26,8 @@ model User {
 
   incomingFriendRequests User[] @relation("UserFriendRequests")
   outgoingFriendRequests User[] @relation("UserFriendRequests")
+
+  likedWorkoutRecords WorkoutRecord[] @relation("UserLikedWorkoutRecords")
 }
 
 model WorkoutRecord {
@@ -33,12 +35,13 @@ model WorkoutRecord {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name String
+  name    String
+  likedBy User[] @relation("UserLikedWorkoutRecords")
 
   exercises WorkoutRecordExercise[]
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation("UserOwnedWorkoutRecords", fields: [userId], references: [id])
 
   workoutSchemaId String
   workoutSchema   WorkoutSchema @relation(fields: [workoutSchemaId], references: [id])
