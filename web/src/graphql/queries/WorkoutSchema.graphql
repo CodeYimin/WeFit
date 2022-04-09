@@ -1,0 +1,12 @@
+query WorkoutSchemas {
+  workoutSchemas {
+    id
+    name
+    exercises {
+      name
+      reps
+      weight
+      duration
+    }
+  }
+}

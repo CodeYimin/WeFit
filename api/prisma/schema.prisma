@@ -14,6 +14,74 @@ model User {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  username  String
-  password  String
+
+  username String @unique
+  password String
+
+  workoutRecords WorkoutRecord[]
+  workoutSchemas WorkoutSchema[]
+
+  friends         User[] @relation("UserFriends")
+  friendsRelation User[] @relation("UserFriends")
+
+  incomingFriendRequests User[] @relation("UserFriendRequests")
+  outgoingFriendRequests User[] @relation("UserFriendRequests")
+}
+
+model WorkoutRecord {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+
+  exercises WorkoutRecordExercise[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model WorkoutRecordExercise {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  reps     Int?
+  weight   Int?
+  duration Int?
+
+  workoutRecordId String
+  workoutRecord   WorkoutRecord @relation(fields: [workoutRecordId], references: [id])
+
+  order Int
+}
+
+model WorkoutSchema {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+
+  exercises WorkoutSchemaExercise[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model WorkoutSchemaExercise {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  reps     Int?
+  weight   Float?
+  duration Int?
+
+  workoutSchemaId String
+  workoutSchema   WorkoutSchema @relation(fields: [workoutSchemaId], references: [id])
+
+  order Int
 }

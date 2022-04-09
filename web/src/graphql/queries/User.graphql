@@ -3,3 +3,10 @@ query UserById($id: ID!) {
     id
   }
 }
+
+query Me {
+  me {
+    id
+    username
+  }
+}

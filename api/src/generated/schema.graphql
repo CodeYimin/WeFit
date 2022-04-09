@@ -2,10 +2,58 @@
 ### Do not make changes to this file directly
 
 
+type FieldError {
+  field: String!
+  message: String!
+}
+
+type Mutation {
+  acceptFriendRequest(fromId: ID!): User!
+  createWorkoutSchema(name: String!): WorkoutSchema!
+  deleteWorkoutSchema(id: String!): Boolean!
+  login(password: String!, username: String!): UserAndErrorResponse!
+  logout: Boolean!
+  register(password: String!, username: String!): UserAndErrorResponse!
+  sendFriendRequest(username: String!): User!
+  updateWorkoutSchemaExercises(exercises: [WorkoutSchemaExerciseInput!]!, id: ID!): WorkoutSchema!
+}
+
 type Query {
+  me: User!
   userById(id: ID!): User
+  workoutSchemas: [WorkoutSchema!]!
 }
 
 type User {
+  friends: [User!]!
   id: ID!
+  incomingFriendRequests: [User!]!
+  outgoingFriendRequests: [User!]
+  username: String!
+}
+
+type UserAndErrorResponse {
+  errors: [FieldError!]
+  user: User
+}
+
+type WorkoutSchema {
+  exercises: [WorkoutSchemaExercise!]!
+  id: ID!
+  name: String!
+  user: User!
+}
+
+type WorkoutSchemaExercise {
+  duration: Int
+  name: String!
+  reps: Int
+  weight: Float
+}
+
+input WorkoutSchemaExerciseInput {
+  duration: Int
+  name: String!
+  reps: Int
+  weight: Float
 }
