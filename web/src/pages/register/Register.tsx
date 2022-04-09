@@ -1,4 +1,4 @@
-import { Box, Input, Text, VStack } from "@chakra-ui/react";
+import { Input, Text, VStack } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ function Register({}: RegisterProps): ReactElement {
                 onBlur={handleBlur}
                 value={values.username}
               />
-              <Box>{errors.username}</Box>
+              <Text color="red">{errors.username}</Text>
               <header>Password</header>
               <Input
                 type="password"
@@ -59,8 +59,8 @@ function Register({}: RegisterProps): ReactElement {
                 onBlur={handleBlur}
                 value={values.password}
               />
-              <Box>{errors.password}</Box>
-              <Button type="submit" disabled={false}>
+              <Text color="red">{errors.password}</Text>
+              <Button color="lightgreen" type="submit" disabled={false}>
                 Register
               </Button>
             </VStack>

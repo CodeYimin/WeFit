@@ -152,6 +152,17 @@ export const WorkoutSchemaMutation = extendType({
           );
         }
 
+        await ctx.db.workoutSchema.update({
+          where: { id },
+          data: {
+            workoutRecords: {
+              disconnect: {
+                id,
+              },
+            },
+          },
+        });
+
         await ctx.db.workoutSchema.delete({
           where: {
             id,

@@ -1,7 +1,8 @@
-import { Flex, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement } from "react";
 import { AiFillLike } from "react-icons/ai";
+import { BsFillPersonFill } from "react-icons/bs";
 import { FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {
@@ -60,23 +61,26 @@ function WorkoutRecord({
   });
 
   return (
-    <VStack w="30rem" spacing="0">
+    <VStack w="40rem" spacing="0">
       <HeaderContainer>
         <VStack alignItems="start" w="full">
           <Flex w="full" justifyContent="space-between" alignItems="center">
-            <Text
+            <HStack
               fontWeight="800"
+              spacing="0.25rem"
               fontSize="2xl"
               _hover={{ cursor: "pointer" }}
               onClick={() => {
                 navigate(`/profile/${user.id}`);
               }}
             >
-              {user.username}
-            </Text>
+              <BsFillPersonFill />
+              <Text>{user.username}</Text>
+            </HStack>
             <HStack>
-              <Text>{likedBy.length}</Text>
+              <Text color="green.300">{likedBy.length}</Text>
               <IconButton
+                color="green.400"
                 size="sm"
                 icon={<AiFillLike />}
                 aria-label="like"
@@ -89,12 +93,17 @@ function WorkoutRecord({
                   }
                 }}
               />
-              <IconButton
-                size="sm"
-                icon={<FaPlay />}
-                aria-label="play"
-                onClick={() => navigate(`/workout?schemaId=${workoutSchemaId}`)}
-              />
+              {workoutSchemaId && (
+                <IconButton
+                  color="green.400"
+                  size="sm"
+                  icon={<FaPlay />}
+                  aria-label="play"
+                  onClick={() =>
+                    navigate(`/workout?schemaId=${workoutSchemaId}`)
+                  }
+                />
+              )}
             </HStack>
           </Flex>
           <Flex w="full" justifyContent="space-between">
@@ -108,10 +117,13 @@ function WorkoutRecord({
       </HeaderContainer>
       <ContentContainer>
         <VStack>
-          {exercises.map((exercise) => (
-            <IWorkoutRecordExercise
-              exercise={exercise}
-            ></IWorkoutRecordExercise>
+          {exercises.map((exercise, index) => (
+            <Box py="1.5rem" w="30rem">
+              <IWorkoutRecordExercise
+                exercise={exercise}
+                index={index}
+              ></IWorkoutRecordExercise>
+            </Box>
           ))}
         </VStack>
       </ContentContainer>

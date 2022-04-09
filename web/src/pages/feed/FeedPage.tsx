@@ -1,6 +1,7 @@
-import { Center, Text, VStack } from "@chakra-ui/react";
+import { Center, HStack, Text, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement } from "react";
+import { CgFeed } from "react-icons/cg";
 import { useAllWorkoutRecordsQuery } from "../../graphql/generated/graphql";
 import FeedSection from "./sections/FeedSection";
 
@@ -25,7 +26,10 @@ function FeedPage({}: FeedPageProps): ReactElement {
   return (
     <VStack my="3rem">
       <VStack spacing="0" mb="5rem">
-        <Text fontSize="6xl">Feed</Text>
+        <HStack>
+          <CgFeed fontSize="5rem" />
+          <Text fontSize="6xl">Feed</Text>
+        </HStack>
         <Text fontSize="2xl">View your friends' workouts</Text>
       </VStack>
       <FeedSection workouts={allWorkoutRecords!} />

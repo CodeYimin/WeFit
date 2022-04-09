@@ -13,6 +13,7 @@ import {
 import styled from "@emotion/styled";
 import { Formik } from "formik";
 import React, { ReactElement } from "react";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import {
   useAcceptFriendRequestMutation,
@@ -70,13 +71,18 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
         <DrawerContent p="2rem">
           <DrawerCloseButton />
           <DrawerHeader fontSize="1.5rem" fontWeight="bold" mx="auto">
-            Friends
+            <HStack>
+              <BsFillPeopleFill fontSize="2rem" />
+              <Text fontSize="3xl">Friends</Text>
+            </HStack>
           </DrawerHeader>
           <VStack justifyContent="space-between" h="full">
             <VStack spacing="1rem" alignItems="start">
               <CurrentFriendsSection>
-                Friends:
-                <UnorderedList>
+                <Text fontSize="lg" fontWeight="600">
+                  Friends:
+                </Text>
+                <UnorderedList mt="0.8rem" spacing="0.8rem">
                   {me?.friends.map((friend) => (
                     <ListItem key={friend.id}>
                       <HStack>
@@ -87,6 +93,7 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                           {friend.username}
                         </Text>
                         <XSButton
+                          color="#FF7F7F"
                           onClick={async () => {
                             await removeFriend({
                               variables: {
@@ -105,8 +112,10 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
               <IncomingFriendSection
                 hidden={!me?.incomingFriendRequests?.length}
               >
-                Incoming Friend Requests:
-                <UnorderedList>
+                <Text fontSize="lg" fontWeight="600">
+                  Incoming Friend Requests:
+                </Text>
+                <UnorderedList mt="0.8rem" spacing="0.8rem">
                   {me?.incomingFriendRequests?.map((friendRequest) => (
                     <ListItem key={friendRequest.id}>
                       <HStack>
@@ -119,6 +128,7 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                           {friendRequest.username}
                         </Text>
                         <XSButton
+                          color="lightgreen"
                           onClick={async () => {
                             await acceptFriendRequest({
                               variables: {
@@ -130,6 +140,7 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                           Accept
                         </XSButton>
                         <XSButton
+                          color="#FF7F7F"
                           onClick={async () => {
                             await rejectFriendRequest({
                               variables: {
@@ -148,14 +159,17 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
               <OutgoingFriendSection
                 hidden={!me?.outgoingFriendRequests?.length}
               >
-                Outgoing Friend Requests:
-                <UnorderedList>
+                <Text fontSize="lg" fontWeight="600">
+                  Outgoing Friend Requests:
+                </Text>
+                <UnorderedList mt="0.8rem" spacing="0.8rem">
                   {me?.outgoingFriendRequests?.map((friendRequest) => (
                     <HStack>
                       <ListItem key={friendRequest.id}>
                         {friendRequest.username}
                       </ListItem>
                       <XSButton
+                        color="#FF7F7F"
                         onClick={async () => {
                           await cancelFriendRequest({
                             variables: {
@@ -208,8 +222,12 @@ function FriendSidebar({ isOpen, onClose }: FriendSidebarProps): ReactElement {
                       value={values.username}
                       style={{ width: "20rem" }}
                     />
-                    <Text>{errors.username}</Text>
-                    <Button type="submit" disabled={isSubmitting}>
+                    <Text color="red">{errors.username}</Text>
+                    <Button
+                      color="lightgreen"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
                       Send Friend Request
                     </Button>
                   </VStack>

@@ -1,5 +1,6 @@
-import { Text, VStack } from "@chakra-ui/react";
+import { HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactElement } from "react";
+import { FaDumbbell } from "react-icons/fa";
 import { Button } from "../../components/Button";
 import {
   useCreateWorkoutSchemaMutation,
@@ -21,12 +22,19 @@ function Workouts({}: WorkoutsProps): ReactElement {
   }
 
   return (
-    <VStack spacing="2rem" mt="3rem">
+    <VStack spacing="2rem" my="3rem">
       <VStack spacing="0">
-        <Text fontSize="6xl">Workouts</Text>
+        <HStack spacing="1rem">
+          <FaDumbbell fontSize="5rem" />
+          <Text fontSize="6xl">Workouts</Text>
+        </HStack>
         <Text fontSize="2xl">Manage your workout Programs</Text>
       </VStack>
+      {workoutSchemas.map((workoutSchema) => (
+        <WorkoutEditor key={workoutSchema.id} workout={workoutSchema} />
+      ))}
       <Button
+        color="lightgreen"
         onClick={async () => {
           await createWorkoutSchema({
             variables: { name: "Untitled Workout" },
@@ -35,9 +43,6 @@ function Workouts({}: WorkoutsProps): ReactElement {
       >
         + Create New Workout
       </Button>
-      {workoutSchemas.map((workoutSchema) => (
-        <WorkoutEditor key={workoutSchema.id} workout={workoutSchema} />
-      ))}
     </VStack>
   );
 }

@@ -43,8 +43,8 @@ model WorkoutRecord {
   userId String
   user   User   @relation("UserOwnedWorkoutRecords", fields: [userId], references: [id])
 
-  workoutSchemaId String
-  workoutSchema   WorkoutSchema @relation(fields: [workoutSchemaId], references: [id])
+  workoutSchemaId String?
+  workoutSchema   WorkoutSchema? @relation(fields: [workoutSchemaId], references: [id])
 }
 
 model WorkoutRecordExercise {

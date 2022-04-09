@@ -178,7 +178,7 @@ export type WorkoutRecord = {
   likedBy: Array<User>;
   name: Scalars['String'];
   user: User;
-  workoutSchemaId: Scalars['ID'];
+  workoutSchemaId?: Maybe<Scalars['ID']>;
 };
 
 export type WorkoutRecordExercise = {
@@ -289,7 +289,7 @@ export type CreateWorkoutRecordMutation = { __typename?: 'Mutation', createWorko
 export type AllWorkoutRecordsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllWorkoutRecordsQuery = { __typename?: 'Query', allWorkoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }> };
+export type AllWorkoutRecordsQuery = { __typename?: 'Query', allWorkoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId?: string | null, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }> };
 
 export type LikeWorkoutRecordMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -310,7 +310,7 @@ export type UserByIdQueryVariables = Exact<{
 }>;
 
 
-export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string, username: string, workoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId: string, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }>, friends: Array<{ __typename?: 'User', id: string }>, outgoingFriendRequests: Array<{ __typename?: 'User', id: string }>, incomingFriendRequests: Array<{ __typename?: 'User', id: string }> } | null };
+export type UserByIdQuery = { __typename?: 'Query', userById?: { __typename?: 'User', id: string, username: string, workoutRecords: Array<{ __typename?: 'WorkoutRecord', id: string, name: string, createdAt: string, workoutSchemaId?: string | null, likedBy: Array<{ __typename?: 'User', id: string }>, exercises: Array<{ __typename?: 'WorkoutRecordExercise', id: string, name: string, reps: number, weight: number, duration: number }>, user: { __typename?: 'User', id: string, username: string } }>, friends: Array<{ __typename?: 'User', id: string }>, outgoingFriendRequests: Array<{ __typename?: 'User', id: string }>, incomingFriendRequests: Array<{ __typename?: 'User', id: string }> } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 

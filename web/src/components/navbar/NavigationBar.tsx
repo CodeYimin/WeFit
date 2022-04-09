@@ -1,5 +1,10 @@
-import { useDisclosure } from "@chakra-ui/react";
+import { HStack, Text, useDisclosure } from "@chakra-ui/react";
 import styled from "@emotion/styled";
+import { ReactElement } from "react";
+import { BiExit } from "react-icons/bi";
+import { BsPeopleFill, BsPersonFill } from "react-icons/bs";
+import { CgFeed } from "react-icons/cg";
+import { FaDumbbell } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import FriendSidebar from "./FriendSidebar";
@@ -15,8 +20,7 @@ const Bar = styled.div`
 `;
 
 const BarTitle = styled.button<{ isActive: boolean }>`
-  order: 1;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #333;
   border-radius: 0.5rem;
@@ -36,7 +40,7 @@ const BarButtons = styled.div`
 `;
 
 const BarButton = styled.button<{ isActive: boolean }>`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 0.5rem 1rem;
   font-weight: bold;
   color: #333;
@@ -68,30 +72,76 @@ function NavigationBar() {
     return <></>;
   }
 
+  let barButtons: ReactElement;
+
   if (error || !me) {
-    return (
-      <Bar>
-        <BarTitle
-          isActive={pathName === "/home"}
-          onClick={() => navigate("/home")}
+    barButtons = (
+      <>
+        <BarButton
+          isActive={pathName === "/register"}
+          onClick={() => navigate("/register")}
         >
-          WeFit
-        </BarTitle>
-        <BarButtons>
-          <BarButton
-            isActive={pathName === "/register"}
-            onClick={() => navigate("/register")}
-          >
-            Sign up
-          </BarButton>
-          <BarButton
-            isActive={pathName === "/workouts"}
-            onClick={() => navigate("/login")}
-          >
-            Log In
-          </BarButton>
-        </BarButtons>
-      </Bar>
+          Sign up
+        </BarButton>
+        <BarButton
+          isActive={pathName === "/workouts"}
+          onClick={() => navigate("/login")}
+        >
+          Log In
+        </BarButton>
+      </>
+    );
+  } else {
+    barButtons = (
+      <>
+        <BarButton
+          isActive={pathName === "/workouts"}
+          onClick={() => navigate("/workouts")}
+        >
+          <HStack>
+            <FaDumbbell fontSize="3rem" />
+            <Text>Workouts</Text>
+          </HStack>
+        </BarButton>
+        <BarButton isActive={pathName === "/"} onClick={() => navigate("/")}>
+          <HStack>
+            <CgFeed fontSize="3rem" />
+            <Text>Feed</Text>
+          </HStack>
+        </BarButton>
+        <BarButton
+          isActive={false}
+          onClick={() => {
+            onFriendsOpen();
+          }}
+        >
+          <HStack>
+            <BsPeopleFill fontSize="3rem" />
+            <Text>Friends</Text>
+          </HStack>
+        </BarButton>
+        <BarButton
+          isActive={pathName === `/profile/${me.id}`}
+          onClick={() => navigate(`/profile/${me.id}`)}
+        >
+          <HStack>
+            <BsPersonFill fontSize="3rem" />
+            <Text>Profile</Text>
+          </HStack>
+        </BarButton>
+        <BarButton
+          isActive={false}
+          onClick={async () => {
+            const res = await logout();
+            navigate("/home");
+          }}
+        >
+          <HStack>
+            <BiExit fontSize="2rem" />
+            <Text>Logout</Text>
+          </HStack>
+        </BarButton>
+      </>
     );
   }
 
@@ -105,40 +155,7 @@ function NavigationBar() {
         >
           WeFit
         </BarTitle>
-        <BarButtons>
-          <BarButton
-            isActive={pathName === "/workouts"}
-            onClick={() => navigate("/workouts")}
-          >
-            Workouts
-          </BarButton>
-          <BarButton isActive={pathName === "/"} onClick={() => navigate("/")}>
-            Feed
-          </BarButton>
-          <BarButton
-            isActive={false}
-            onClick={() => {
-              onFriendsOpen();
-            }}
-          >
-            Friends
-          </BarButton>
-          <BarButton
-            isActive={pathName === `/profile/${me.id}`}
-            onClick={() => navigate(`/profile/${me.id}`)}
-          >
-            Profile
-          </BarButton>
-          <BarButton
-            isActive={false}
-            onClick={async () => {
-              const res = await logout();
-              navigate("/home");
-            }}
-          >
-            Logout
-          </BarButton>
-        </BarButtons>
+        <BarButtons>{barButtons}</BarButtons>
       </Bar>
     </>
   );

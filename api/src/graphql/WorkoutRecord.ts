@@ -6,7 +6,7 @@ export const WorkoutRecord = objectType({
   definition(t) {
     t.nonNull.id("id");
     t.nonNull.string("name");
-    t.nonNull.id("workoutSchemaId");
+    t.id("workoutSchemaId");
     t.nonNull.list.nonNull.field("likedBy", {
       type: "User",
       async resolve(root, _args, ctx) {

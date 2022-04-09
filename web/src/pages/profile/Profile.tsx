@@ -1,5 +1,6 @@
-import { Center, Text, useToast, VStack } from "@chakra-ui/react";
+import { Center, HStack, Text, useToast, VStack } from "@chakra-ui/react";
 import { ReactElement } from "react";
+import { BsFillPersonFill } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { Button } from "../../components/Button";
 import {
@@ -59,11 +60,15 @@ function Profile({}: ProfileProps): ReactElement {
     <VStack my="3rem">
       <VStack p="1rem" borderRadius="1rem" mb="3rem">
         <VStack spacing="0">
-          <Text fontSize="6xl">{user.username}</Text>
+          <HStack>
+            <BsFillPersonFill fontSize="5rem" />
+            <Text fontSize="6xl">{user.username}</Text>
+          </HStack>
           <Text fontSize="2xl">Viewing profile: {user.username}</Text>
         </VStack>
         {isFriend && (
           <Button
+            color="#FF7F7F"
             onClick={async () => {
               const { errors } = await removeFriend();
               if (!error) {
@@ -76,6 +81,7 @@ function Profile({}: ProfileProps): ReactElement {
         )}
         {isRequested && (
           <Button
+            color="#FF7F7F"
             onClick={async () => {
               const { errors } = await cancelFriendRequest();
               if (!error) {
@@ -88,6 +94,7 @@ function Profile({}: ProfileProps): ReactElement {
         )}
         {!isSelf && !isFriend && !isRequested && (
           <Button
+            color="lightgreen"
             onClick={async () => {
               const { errors } = await sendFriendRequest();
               toast({ title: "Friend request sent", status: "success" });

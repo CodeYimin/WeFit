@@ -22,15 +22,19 @@ const Field = styled.div`
 
 interface WorkoutRecordExerciseProps {
   exercise: IWorkoutRecordExercise;
+  index: number;
 }
 
 function WorkoutRecordExercise({
   exercise: { id, name, reps, weight, duration },
+  index,
 }: WorkoutRecordExerciseProps): ReactElement {
   return (
     <VStack w="full">
-      <ExerciseName>{name}</ExerciseName>
-      <HStack>
+      <ExerciseName>
+        {index + 1}. {name}
+      </ExerciseName>
+      <HStack pt="0.5rem">
         <HStack>
           <Text>Reps: </Text> <Field>{reps}</Field>
         </HStack>

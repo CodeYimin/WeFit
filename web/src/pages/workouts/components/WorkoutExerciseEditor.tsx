@@ -2,6 +2,7 @@ import { Box, HStack, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { Formik } from "formik";
 import { ReactElement, useEffect, useState } from "react";
+import { BsTrashFill } from "react-icons/bs";
 import { Button } from "../../../components/Button";
 import {
   useDeleteWorkoutSchemaExerciseMutation,
@@ -54,8 +55,8 @@ function WorkoutExerciseEditor({
   }, [data]);
 
   return (
-    <HStack>
-      <Box>
+    <HStack alignItems="start">
+      <Box w="30rem">
         <Formik
           initialValues={{
             name,
@@ -90,7 +91,7 @@ function WorkoutExerciseEditor({
                   submitForm();
                 }}
               />
-              <HStack w="full" spacing="1.5rem">
+              <HStack w="full" spacing="1.5rem" pt="0.5rem">
                 <Box>
                   Reps:{" "}
                   <FieldInput
@@ -111,7 +112,7 @@ function WorkoutExerciseEditor({
                       submitForm();
                     }}
                     value={data?.weight?.toString() || ""}
-                  />
+                  />{" "}
                   lbs
                 </Box>
                 <Box>
@@ -123,7 +124,7 @@ function WorkoutExerciseEditor({
                       submitForm();
                     }}
                     value={data?.duration?.toString() || ""}
-                  />
+                  />{" "}
                   s
                 </Box>
               </HStack>
@@ -131,7 +132,9 @@ function WorkoutExerciseEditor({
           )}
         </Formik>
       </Box>
-      <Button onClick={() => deleteExercise()}>Delete</Button>
+      <Button color="#FF7F7F" onClick={() => deleteExercise()}>
+        <BsTrashFill fontSize="1.5rem" />
+      </Button>
     </HStack>
   );
 }

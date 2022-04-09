@@ -58,7 +58,7 @@ export interface NexusGenObjects {
   WorkoutRecord: { // root type
     id: string; // ID!
     name: string; // String!
-    workoutSchemaId: string; // ID!
+    workoutSchemaId?: string | null; // ID
   }
   WorkoutRecordExercise: { // root type
     duration: number; // Int!
@@ -141,7 +141,7 @@ export interface NexusGenFieldTypes {
     likedBy: NexusGenRootTypes['User'][]; // [User!]!
     name: string; // String!
     user: NexusGenRootTypes['User']; // User!
-    workoutSchemaId: string; // ID!
+    workoutSchemaId: string | null; // ID
   }
   WorkoutRecordExercise: { // field return type
     duration: number; // Int!

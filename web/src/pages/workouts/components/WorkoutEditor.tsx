@@ -1,6 +1,7 @@
-import { Box, HStack, IconButton, VStack } from "@chakra-ui/react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { ReactElement, useEffect, useState } from "react";
+import { BsTrashFill } from "react-icons/bs";
 import { FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/Button";
@@ -70,30 +71,36 @@ function WorkoutEditor({
   }, [nameValue]);
 
   return (
-    <VStack w="max-content" minW="30rem" spacing="0">
+    <VStack w="max-content" minW="40rem" spacing="0">
       <HeaderContainer>
         <Header
+          style={{ fontSize: "1.5rem", lineHeight: "1" }}
           value={nameValue}
           onChange={(event) => setNameValue(event.target.value)}
         />
         <HStack>
-          <IconButton
-            color="green.400"
-            size="sm"
-            icon={<FaPlay />}
-            aria-label="play"
+          <Button
+            color="lightgreen"
             onClick={() => navigate(`/workout?schemaId=${id}`)}
-          />
-          <Button onClick={() => deleteWorkoutSchema()}>Delete</Button>
+          >
+            <FaPlay fontSize="1.5rem" />
+          </Button>
+          <Button color="#FF7F7F" onClick={() => deleteWorkoutSchema()}>
+            <BsTrashFill fontSize="1.5rem" />
+          </Button>
         </HStack>
       </HeaderContainer>
       <ContentContainer>
         <VStack>
           {exercises.map((exercise) => (
-            <WorkoutExerciseEditor key={exercise.id} exercise={exercise} />
+            <Box py="1rem">
+              <WorkoutExerciseEditor key={exercise.id} exercise={exercise} />
+            </Box>
           ))}
           <Box h="1rem" />
-          <Button onClick={() => addNewExercise()}>+ Add New Exercise</Button>
+          <Button color="lightgreen" onClick={() => addNewExercise()}>
+            + Add New Exercise
+          </Button>
         </VStack>
       </ContentContainer>
     </VStack>
