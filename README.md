@@ -1,6 +1,6 @@
 # WeFit
-A fitness tracker and social media. Create, do, and share workouts with your friends, all in one app. 
-Made in 24 hours at YRHacks.
+A fitness tracker and social media. Create, do, and share workouts with your friends, all in one app.
+<br>Made in 24 hours at YRHacks. No prizes because completed failed the pitch (pitch was worse than what you're thinking).
 
 # Functionalities
 - Create: Create fully customizable and reusable workout programs/outlines.
