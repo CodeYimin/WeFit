@@ -13,9 +13,9 @@ Made in 24 hours at YRHacks.
 - Low workout motivation
 
 # How problems are being solved
-- By spending a couple minutes creating your workout program beforehand, the tracker will show you exactly what part of the workout you are and what exercise to do, making it impossible to forget your workout
-- The tracker automatically logs the time you took on each exercise, as well as the reps and weight (you can set reps/weight after each exercise if it does not match the reps/weight described in the premade workout program)
-- By seeing your friends workout, you are inclined to workout as well 
+- By spending a couple minutes creating your workout program beforehand, the tracker will show you exactly what part of the workout you are on and what exercise/reps/weight/duration to do, making it impossible to forget your workout
+- The tracker automatically logs the time you took on each exercise, as well as the reps and weight (you have a chance to set reps/weight after each exercise if it does not match the reps/weight described in the premade workout program)
+- By seeing your friends workout, you are inclined to workout as well. Being able to share your workouts and progress with your friends also boosts your motivation.
 
 
 
